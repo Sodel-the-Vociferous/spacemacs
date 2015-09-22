@@ -29,11 +29,14 @@
      ;; better-defaults
      emacs-lisp
      git
+     html
+     javascript
      ;; markdown
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
+     slime
      ;; syntax-checking
      version-control
      )
@@ -72,6 +75,7 @@
                                       dired-single
                                       doc-view
                                       ebib
+                                      ein
                                       eldoc
                                       elfeed
                                       elfeed-org
@@ -108,8 +112,8 @@
                                       rust-mode
                                       scala-mode
                                         ;shell-command
-                                      slime
-                                        ;slime-company
+                                      ;; slime
+                                      ;; slime-company
                                       ssh-config-mode
                                       term-run
                                       tidy
@@ -230,7 +234,7 @@ before layers configuration."
    ;; Transparency can be toggled through `toggle-transparency'.
    dotspacemacs-inactive-transparency 90
    ;; If non nil unicode symbols are displayed in the mode line.
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen.
@@ -498,7 +502,8 @@ layers configuration."
     :bind ("C-=" . er/expand-region))
 
   (use-package flycheck
-    :config (global-flycheck-mode 1))
+    ;; :config (global-flycheck-mode 1)
+    )
 
   (use-package flycheck-rust
     :defer t
@@ -943,9 +948,15 @@ layers configuration."
  '(ahs-inhibit-face-list nil)
  '(delete-selection-mode nil)
  '(erc-image-inline-rescale (quote window))
+ '(erc-prompt-for-nickserv-password nil)
  '(evil-rsi-mode t)
+ '(expand-region-contract-fast-key "V")
+ '(expand-region-reset-fast-key "r")
+ '(paradox-github-token t)
  '(powerline-default-separator (quote slant))
- '(ring-bell-function (quote ignore) t))
+ '(ring-bell-function (quote ignore) t)
+ '(rmh-elfeed-org-files (quote ("~/personal/elfeed.org")))
+ '(undo-tree-visualizer-diff nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
