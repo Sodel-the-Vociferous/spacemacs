@@ -486,7 +486,8 @@ layers configuration."
                                         evil-insert-state-modes)
 
         evil-move-cursor-back nil
-        evil-want-C-i-jump nil)
+        evil-want-C-i-jump nil
+        evil-want-C-u-scroll nil)
 
   (use-package evil-rsi
     :diminish evil-rsi-mode
