@@ -113,6 +113,7 @@
                                       request
                                       rust-mode
                                       scala-mode
+                                      simple-httpd
                                         ;shell-command
                                       ;; slime
                                       ;; slime-company
