@@ -85,6 +85,8 @@
                                       flycheck
                                       flycheck-rust
                                       flylisp
+                                      flymake-jslint
+                                      flymake-json
                                       flyspell
                                       ggtags
                                       helm-company
@@ -611,12 +613,14 @@ layers configuration."
   ;; outside of project dirs.
   (evil-leader/set-key "p F" 'projectile-find-file-in-known-projects)
 
-  (use-package js2-mode
-    :defer t
-    :mode "\\.js\\'")
   (use-package json-mode
-    :defer t
-    :mode "\\.json\\'")
+    :config
+    (add-hook-progn
+     'json-mode-hook
+
+     (flymake-json-load)
+     (flymake-mode-on)
+     (flycheck-mode)))
 
   (bind-key "C-z m a" 'magit-commit-amend)
   (setq magit-status-buffer-switch-function 'switch-to-buffer)
