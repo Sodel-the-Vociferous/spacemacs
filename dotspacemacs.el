@@ -605,10 +605,7 @@ layers configuration."
    projectile-enable-caching t
    projectile-completion-system 'helm
    projectile-find-dir-includes-top-level t
-   projectile-switch-project-action 'projectile-vc)
-
-  (if (eq system-type 'cygwin)
-      (setq projectile-switch-project-action 'projectile-dired))
+   projectile-switch-project-action 'projectile-dired)
 
   ;; Rebind this, because the helm version doesn't work
   ;; outside of project dirs.
