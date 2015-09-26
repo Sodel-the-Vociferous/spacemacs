@@ -299,6 +299,8 @@ layers configuration."
     :config
     (progn
       (unbind-key "C-z")
+      (unbind-key "<insert>")
+      (unbind-key "<insertchar>")
       ;; evil-rsi "helpfully" rebinds C-h in insert-mode -- THE HELP COMMAND --
       ;; without warning anyone.
       (bind-key "C-h a" 'helm-apropos)
