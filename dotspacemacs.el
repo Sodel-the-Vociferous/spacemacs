@@ -263,7 +263,9 @@ before layers configuration."
                            ("MELPA" . "http://melpa.org/packages/")
                            ("gnu" . "http://elpa.gnu.org/packages/")))
   (package-initialize)
-  (setq evil-toggle-key "C-`")
+  (setq evil-toggle-key "C-`"
+        evil-want-C-i-jump nil
+        evil-want-C-u-scroll nil)
   )
 
 (defun dotspacemacs/config ()
@@ -490,9 +492,7 @@ layers configuration."
                                           inferior-ess-mode)
                                         evil-insert-state-modes)
 
-        evil-move-cursor-back nil
-        evil-want-C-i-jump nil
-        evil-want-C-u-scroll nil)
+        evil-move-cursor-back nil)
 
   (use-package evil-rsi
     :diminish evil-rsi-mode
