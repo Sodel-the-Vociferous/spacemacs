@@ -881,7 +881,9 @@ layers configuration."
 
   (use-package undo-tree
     :diminish undo-tree-mode
-    :config (global-undo-tree-mode 1))
+    :config
+    (setq undo-tree-visualizer-diff nil)
+    (global-undo-tree-mode 1))
   ;; (unicode-fonts
   ;;  :require persistent-soft
 
