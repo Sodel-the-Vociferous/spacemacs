@@ -98,6 +98,7 @@
                                       list-utils
                                       log4e
                                       markdown-mode
+                                      markdown-mode+
                                       notmuch
                                       notmuch-labeler
                                       nxml
