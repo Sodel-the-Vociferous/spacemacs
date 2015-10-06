@@ -425,6 +425,11 @@ layers configuration."
    erc-log-channels-directory (concat "~/org/chats/" system-name "-irc/")
    erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"))
 
+  (add-hook-progn
+   'erc-mode-hook
+   (erc-image-disable)
+   (erc-youtube-disable))
+
   (use-package erlang-mod
     :defer t
     :mode "\\.erl\\'"
