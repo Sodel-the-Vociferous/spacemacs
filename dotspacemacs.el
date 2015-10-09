@@ -539,9 +539,9 @@ layers configuration."
             (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
   (use-package function-args :defer t)
   ;; (git-blame :defer t)
- ;; (git-commit
-  ;; :demand t
-  ;; :config (global-git-commit-mode))
+  (use-package git-commit
+  :demand t
+  :config (global-git-commit-mode 1))
   ;; (git-modeline
   ;;  :config (setq git-state-modeline-decoration 'git-state-decoration-letter))
   ;; (use-package git-rebase :defer t)
