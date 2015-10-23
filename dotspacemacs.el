@@ -427,6 +427,7 @@ layers configuration."
 
   (add-hook-progn
    'erc-mode-hook
+   (flyspell-mode-on)
    (erc-image-disable)
    (erc-youtube-disable))
 
