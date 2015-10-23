@@ -616,6 +616,9 @@ layers configuration."
    projectile-find-dir-includes-top-level t
    projectile-switch-project-action 'projectile-dired)
 
+  (when (eq system-type 'cygwin)
+    (setq projectile-indexing-method 'native))
+
   ;; Rebind this, because the helm version doesn't work
   ;; outside of project dirs.
   (evil-leader/set-key "p F" 'projectile-find-file-in-known-projects)
