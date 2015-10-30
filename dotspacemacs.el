@@ -439,6 +439,7 @@ layers configuration."
                erlang-root-dir "/usr/lib/erlang"
                exec-path (cons "/usr/lib/erlang/bin" exec-path))))
 
+  (evil-leader/set-key "ase" 'eshell)
   (setq eshell-cmpl-cycle-completions t)
 
   (add-hook
@@ -867,10 +868,9 @@ layers configuration."
               ;; Terminals in emacs should be able to run tmux, regardless of
               ;; whether or not emacs was started within tmux.
               (setenv "TMUX" "")))
-  ;; TODO
-  ;; (term-run
-  ;;  :bind (("M-!" . term-run-shell-command)
-  ;;         ("C-M-!" . shell-command)))
+  (term-run
+   :init
+   (evil-leader/set-key "M-!" 'term-run-shell-command))
   (use-package tidy
     :defer t
     :commands tidy-buffer
