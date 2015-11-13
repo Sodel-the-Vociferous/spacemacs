@@ -290,6 +290,10 @@ layers configuration."
    indent-tabs-mode nil
    tab-width 4)
 
+  (defun user/surface-pro-huge-text ()
+    (interactive)
+    (set-face-attribute 'default nil :height 240))
+
   (setq recentf-save-file "~/.emacs.d/recentf")
 
   (setq sentence-end-double-space nil)
