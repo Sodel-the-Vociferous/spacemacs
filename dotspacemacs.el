@@ -872,7 +872,7 @@ layers configuration."
               ;; Terminals in emacs should be able to run tmux, regardless of
               ;; whether or not emacs was started within tmux.
               (setenv "TMUX" "")))
-  (term-run
+  (use-package term-run
    :init
    (evil-leader/set-key "M-!" 'term-run-shell-command))
   (use-package tidy
