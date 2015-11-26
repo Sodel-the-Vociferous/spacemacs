@@ -304,8 +304,6 @@ layers configuration."
 
   (setq shell-command-switch "-lc")
 
-  (evil-leader/set-key "s u" 'browse-url)
-
   (use-package bind-key
     :config
     (progn
@@ -323,6 +321,11 @@ layers configuration."
       (bind-key "C-h C-M-f" 'find-function)
       (bind-key "C-h C-M-v" 'find-variable)
       (bind-key "C-z C-z" 'suspend-frame)))
+
+  (evil-leader/set-key "s u" 'browse-url)
+  (bind-key "C-`" 'evil-emacs-state evil-evilified-state-map)
+  (bind-key "K" 'magit-discard magit-status-mode-map)
+  (unbind-key "K" evil-motion-state-map)
 
   (use-package auto-compile
     :config (progn
