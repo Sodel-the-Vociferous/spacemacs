@@ -324,7 +324,10 @@ layers configuration."
 
   (evil-leader/set-key "s u" 'browse-url)
   (bind-key "C-`" 'evil-emacs-state evil-evilified-state-map)
-  (bind-key "K" 'magit-discard magit-status-mode-map)
+  (require 'magit)
+  (require 'magit-diff)
+  (bind-key [remap magit-delete-thing] 'magit-discard magit-hunk-section-map)
+  (bind-key "K" 'magit-delete-thing magit-status-mode-map)
   (unbind-key "K" evil-motion-state-map)
 
   (use-package auto-compile
