@@ -45,8 +45,6 @@
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(
-                                      ;; elfeed
-                                      ;; elfeed-org
                                       ;; git-blame
                                       ;; git-commit
                                       ;; git-rebase
@@ -138,6 +136,7 @@
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(
                                     powerline
+                                    spaceline
                                     evil-search-highlight-persist
                                     )
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -984,10 +983,11 @@ layers configuration."
  '(expand-region-contract-fast-key "V")
  '(expand-region-reset-fast-key "r")
  '(paradox-github-token t)
- '(powerline-default-separator (quote slant))
+ '(powerline-default-separator nil)
  '(ring-bell-function (quote ignore) t)
  '(rmh-elfeed-org-files (quote ("~/personal/elfeed.org")))
  '(undo-tree-visualizer-diff nil))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
