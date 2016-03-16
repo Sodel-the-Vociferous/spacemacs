@@ -13,6 +13,7 @@
       '(
         company
         company-tern
+        evil-matchit
         flycheck
         js-doc
         js2-mode
@@ -28,6 +29,12 @@
 
   (defun react/post-init-company-tern ()
     (push 'company-tern company-backends-react-mode)))
+
+(defun react/post-init-evil-matchit ()
+  (with-eval-after-load 'evil-matchit
+    (plist-put evilmi-plugins 'react-mode '((evilmi-simple-get-tag evilmi-simple-jump)
+                                            (evilmi-javascript-get-tag evilmi-javascript-jump)
+                                            (evilmi-html-get-tag evilmi-html-jump)))))
 
 (defun react/pre-init-flycheck ()
   (spacemacs|use-package-add-hook flycheck
@@ -47,7 +54,11 @@
   (add-hook 'react-mode-hook 'spacemacs/js-doc-require)
   (spacemacs/js-doc-set-key-bindings 'react-mode))
 
+(defun react//setup-imenu ()
+  (setq imenu-create-index-function #'js2-mode-create-imenu-index))
+
 (defun react/post-init-js2-mode ()
+  (add-hook 'react-mode-hook 'react//setup-imenu)
   (add-hook 'react-mode-hook 'js2-imenu-extras-mode)
   (add-hook 'react-mode-hook 'js2-minor-mode))
 
