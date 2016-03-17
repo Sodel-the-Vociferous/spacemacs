@@ -18,21 +18,24 @@
    '(
      erc
      gtags
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
      (auto-completion :variables
                       auto-completion-return-key-behavior nil
                       auto-completion-tab-key-behavior 'complete)
      ;; better-defaults
-     emacs-lisp
-     git
-     html
-     javascript
+
      ;; markdown
      ;; org
+     c-c++
+     emacs-lisp
+     erlang
+     git
+     html
+     ipython-notebook
+     javascript
+     python
+     rust
+     shell-scripts
+     semantic
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -309,14 +312,15 @@ layers configuration."
       (unbind-key "C-z")
       (unbind-key "<insert>")
       (unbind-key "<insertchar>")
-      ;; evil-rsi "helpfully" rebinds C-h in insert-mode -- THE HELP COMMAND --
-      ;; without warning anyone.
+      ;; HALLELUJAH :)
+      (bind-key "C-x <right>" 'spacemacs/next-useful-buffer)
+      (bind-key "C-x <left>" 'spacemacs/previous-useful-buffer)
       (bind-key "C-h a" 'helm-apropos)
       (bind-key "C-y" 'helm-show-kill-ring)
       (bind-key "C-g" 'keyboard-escape-quit)
       (bind-key "<mouse-3>" 'mouse-popup-menubar)
-      (bind-key "<mouse-8>" 'previous-buffer)
-      (bind-key "<mouse-9>" 'next-buffer)
+      (bind-key "<mouse-8>" (kbd "C-x <left>"))
+      (bind-key "<mouse-9>" (kbd "C-x <right>"))
       (bind-key "C-h C-M-f" 'find-function)
       (bind-key "C-h C-M-v" 'find-variable)
       (bind-key "C-z C-z" 'suspend-frame)))
@@ -497,6 +501,7 @@ layers configuration."
   (add-hook-progn 'git-commit-mode-hook (evil-insert-state))
 
   (setq evil-emacs-state-modes (append '(term-mode
+                                         anaconda-mode-view-mode
                                          elfeed-search-mode
                                          elfeed-show-mode
                                          epa-key-list-mode
@@ -515,10 +520,18 @@ layers configuration."
 
         evil-move-cursor-back nil)
 
+  (use-package anaconda-mode
+    :config
+    (spacemacs/helm-gtags-define-keys-for-mode 'anaconda-mode)
+    (add-hook-progn 'anaconda-mode-view-mode-hook
+                    (evil-emacs-state)))
+
   (use-package evil-rsi
     :diminish evil-rsi-mode
     :config
     (evil-rsi-mode)
+    ;; evil-rsi "helpfully" rebinds C-h in insert-mode -- THE HELP COMMAND --
+    ;; without warning anyone.
     (unbind-key "<insert-state> C-h" evil-rsi-mode-map))
 
   (use-package evil-surround
@@ -562,8 +575,9 @@ layers configuration."
   ;; (use-package git-rebase :defer t)
   ;; (use-package gitconfig-mode :defer t)
   ;; (use-package gitignore-mode :defer t)
-  (use-package ggtags
-    :bind ("M-r" . ggtags-query-replace))
+
+  ;; (use-package ggtags
+  ;;   :bind ("M-r" . ggtags-query-replace))
   (use-package julia-mode
     :defer t
     :commands julia-mode
@@ -582,42 +596,42 @@ layers configuration."
   (use-package helm-company
     :bind ("<C-tab>" . helm-company))
 
-  (use-package helm-gtags
-    :demand t
-    :init
-    (progn
-      (defun helm-gtags-update-tags-quietly ()
-        (flet ((message (&rest _) nil))
-          (helm-gtags-update-tags)))
+  ;; (use-package helm-gtags
+  ;;   :demand t
+  ;;   :init
+  ;;   (progn
+  ;;     (defun helm-gtags-update-tags-quietly ()
+  ;;       (flet ((message (&rest _) nil))
+  ;;         (helm-gtags-update-tags)))
 
-      (define-minor-mode helm-gtags-auto-update-mode
-        "Auto update GTAGS when a file in this mode is saved."
-        :init-value nil
-        :group 'helm-gtags-update
-        (if helm-gtags-auto-update-mode
-            (progn
-              (add-hook 'after-save-hook 'helm-gtags-update-tags-quietly nil :local))
-          (remove-hook 'after-save-hook 'helm-gtags-update-tags-quietly t)))
+  ;;     (define-minor-mode helm-gtags-auto-update-mode
+  ;;       "Auto update GTAGS when a file in this mode is saved."
+  ;;       :init-value nil
+  ;;       :group 'helm-gtags-update
+  ;;       (if helm-gtags-auto-update-mode
+  ;;           (progn
+  ;;             (add-hook 'after-save-hook 'helm-gtags-update-tags-quietly nil :local))
+  ;;         (remove-hook 'after-save-hook 'helm-gtags-update-tags-quietly t)))
 
-      (defun enable-helm-gtags-auto-update-mode()
-        "Turn on `helm-gtags-auto-update-mode'."
-        (interactive)
-        (helm-gtags-auto-update-mode 1))
+  ;;     (defun enable-helm-gtags-auto-update-mode()
+  ;;       "Turn on `helm-gtags-auto-update-mode'."
+  ;;       (interactive)
+  ;;       (helm-gtags-auto-update-mode 1))
 
-      (add-hook 'dired-mode-hook 'helm-gtags-mode)
-      (add-hook 'prog-mode-hook 'helm-gtags-mode)
-      (add-hook 'prog-mode-hook 'enable-helm-gtags-auto-update-mode))
+  ;;     (add-hook 'dired-mode-hook 'helm-gtags-mode)
+  ;;     (add-hook 'prog-mode-hook 'helm-gtags-mode)
+  ;;     (add-hook 'prog-mode-hook 'enable-helm-gtags-auto-update-mode))
 
-    :config
-    (progn
-      (require 'ggtags)
+  ;;   :config
+  ;;   (progn
+  ;;     (require 'ggtags)
 
-      (setq
-       helm-gtags-ignore-case t
-       helm-gtags-auto-update t
-       helm-gtags-use-input-at-cursor t
-       helm-gtags-pulse-at-cursor t
-       helm-gtags-suggested-key-mapping t)))
+  ;;     (setq
+  ;;      helm-gtags-ignore-case t
+  ;;      helm-gtags-auto-update t
+  ;;      helm-gtags-use-input-at-cursor t
+  ;;      helm-gtags-pulse-at-cursor t
+  ;;      helm-gtags-suggested-key-mapping t)))
 
   ;; TODO
   ;; (bind-key "M-." 'helm-gtags-find-tag helm-gtags-mode-map)
