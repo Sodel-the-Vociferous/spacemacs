@@ -185,7 +185,7 @@ before layers configuration."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+                               :size 20
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -287,7 +287,6 @@ layers configuration."
     (tool-bar-mode 0))
   (menu-bar-mode 0)
   (column-number-mode t)
-  (set-face-attribute 'default nil :height 140)
   (setq-default
    indent-tabs-mode nil
    tab-width 4)
@@ -961,6 +960,9 @@ layers configuration."
   (use-package zenburn-theme
     :config
     (set-face-background 'region "dark slate gray"))
+
+  ;; (set-face-attribute 'default t :height 140)
+  ;; (set-face-attribute 'default nil :height 140)
 
 ;;; For Time Sheets
   (defun tbl-total-hours-to-money(wage original-string)
