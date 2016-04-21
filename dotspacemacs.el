@@ -637,6 +637,9 @@ layers configuration."
   ;; (bind-key "M-." 'helm-gtags-find-tag helm-gtags-mode-map)
   ;; (bind-key "M-?" 'helm-gtags-find-pattern helm-gtags-mode-map)))
 
+  ;; Don't jump to other directory when finding new file.
+  (setq ido-auto-merge-work-directories-length -1)
+
   (setq
    projectile-find-file-hook (lambda () (projectile-invalidate-cache nil))
    projectile-enable-caching t
