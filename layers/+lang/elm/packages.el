@@ -23,9 +23,6 @@
   (spacemacs|add-company-hook elm-mode)
   (add-hook 'elm-mode-hook 'elm-oracle-setup-completion))
 
-(defun spacemacs//elm-find-root ()
-  (setq default-directory (elm--find-dependency-file-path)))
-
 (defun elm/post-init-flycheck ()
   (add-hook 'elm-mode-hook 'flycheck-mode)
   (add-hook 'elm-mode-hook 'spacemacs//elm-find-root))

@@ -1,6 +1,6 @@
 ;;; holy-mode.el --- Enter the church of Emacs
 
-;; Copyright (C) 2012-2016 Sylvain Benner & Contributors
+;; Copyright (C) 2014-2015 syl20bnr
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; Keywords: convenience editing
@@ -50,8 +50,7 @@
 (define-minor-mode holy-mode
   "Global minor mode to repulse the evil from spacemacs.
 
-`evil-mode' and other minor modes in
-`holy-mode-modes-to-disable-alist' are turned off."
+The `insert state' is replaced by the `emacs state'."
   :global t
   :lighter " holy"
   :group 'spacemacs
