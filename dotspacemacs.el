@@ -990,20 +990,23 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ahs-case-fold-search nil)
- '(ahs-default-range (quote ahs-range-whole-buffer))
- '(ahs-idle-interval 0.25)
+ '(ahs-case-fold-search nil t)
+ '(ahs-default-range (quote ahs-range-whole-buffer) t)
+ '(ahs-idle-interval 0.25 t)
  '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil)
+ '(ahs-inhibit-face-list nil t)
  '(delete-selection-mode nil)
  '(erc-image-inline-rescale (quote window))
  '(erc-prompt-for-nickserv-password nil)
  '(evil-rsi-mode t)
  '(expand-region-contract-fast-key "V")
  '(expand-region-reset-fast-key "r")
+ '(package-selected-packages
+   (quote
+    (srefactor paradox hydra spinner orgit magit-gitflow helm-flx git-gutter-fringe+ git-gutter+ evil-magit magit magit-popup git-commit with-editor company-quickhelp pos-tip zenburn-theme xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe use-package unfill ucs-utils toml-mode tidy term-run tagedit stickyfunc-enhance ssh-config-mode spacemacs-theme smooth-scrolling smeargle slim-mode simple-httpd scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv python pytest pylint pyenv-mode py-yapf popwin pip-requirements persp-mode pcre2el page-break-lines package+ outline-magic org-projectile open-junk-file notmuch-labeler neotree move-text markdown-mode+ macrostep lorem-ipsum log4e list-processes+ linum-relative leuven-theme less-css-mode json-mode js2-refactor js-doc jade-mode info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks emmet-mode elisp-slime-nav elfeed-org ein ebib disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-racer company-c-headers company-anaconda color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap buffer-move browse-kill-ring bracketed-paste bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(paradox-github-token t)
  '(powerline-default-separator nil)
- '(ring-bell-function (quote ignore) t)
+ '(ring-bell-function (quote ignore))
  '(rmh-elfeed-org-files (quote ("~/personal/elfeed.org")))
  '(undo-tree-visualizer-diff nil))
 
