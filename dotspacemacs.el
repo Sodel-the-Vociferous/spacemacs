@@ -259,6 +259,7 @@ before layers configuration."
    ;; specified with an installed package.
    ;; Not used for now.
    dotspacemacs-default-package-repository nil
+   dotspacemacs-large-file-size 10
    )
 
   ;; User initialization goes here
