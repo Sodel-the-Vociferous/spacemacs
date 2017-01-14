@@ -991,31 +991,105 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ahs-case-fold-search nil t)
- '(ahs-default-range (quote ahs-range-whole-buffer) t)
- '(ahs-idle-interval 0.25 t)
+ '(ahs-case-fold-search nil)
+ '(ahs-default-range (quote ahs-range-whole-buffer))
+ '(ahs-idle-interval 0.25)
  '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil t)
+ '(ahs-inhibit-face-list nil)
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+ '(compilation-message-face (quote default))
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#839496")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
  '(delete-selection-mode nil)
  '(erc-image-inline-rescale (quote window))
  '(erc-prompt-for-nickserv-password nil)
  '(evil-rsi-mode t)
+ '(evil-want-Y-yank-to-eol nil)
  '(expand-region-contract-fast-key "V")
  '(expand-region-reset-fast-key "r")
+ '(fci-rule-color "#073642" t)
+ '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+ '(highlight-symbol-colors
+   (--map
+    (solarized-color-blend it "#002b36" 0.25)
+    (quote
+     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+ '(highlight-symbol-foreground-color "#93a1a1")
+ '(highlight-tail-colors
+   (quote
+    (("#073642" . 0)
+     ("#546E00" . 20)
+     ("#00736F" . 30)
+     ("#00629D" . 50)
+     ("#7B6000" . 60)
+     ("#8B2C02" . 70)
+     ("#93115C" . 85)
+     ("#073642" . 100))))
+ '(hl-bg-colors
+   (quote
+    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
+ '(hl-fg-colors
+   (quote
+    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+ '(magit-diff-use-overlays nil)
+ '(nrepl-message-colors
+   (quote
+    ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (srefactor paradox hydra spinner orgit magit-gitflow helm-flx git-gutter-fringe+ git-gutter+ evil-magit magit magit-popup git-commit with-editor company-quickhelp pos-tip zenburn-theme xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe use-package unfill ucs-utils toml-mode tidy term-run tagedit stickyfunc-enhance ssh-config-mode spacemacs-theme smooth-scrolling smeargle slim-mode simple-httpd scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv python pytest pylint pyenv-mode py-yapf popwin pip-requirements persp-mode pcre2el page-break-lines package+ outline-magic org-projectile open-junk-file notmuch-labeler neotree move-text markdown-mode+ macrostep lorem-ipsum log4e list-processes+ linum-relative leuven-theme less-css-mode json-mode js2-refactor js-doc jade-mode info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks emmet-mode elisp-slime-nav elfeed-org ein ebib disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-racer company-c-headers company-anaconda color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap buffer-move browse-kill-ring bracketed-paste bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (monokai-theme solarized-theme zenburn-theme-theme zenburn-theme anaconda-mode yapfify uuidgen py-isort pug-mode org-plus-contrib srefactor paradox hydra spinner orgit magit-gitflow helm-flx git-gutter-fringe+ git-gutter+ evil-magit magit magit-popup git-commit with-editor company-quickhelp pos-tip xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe use-package unfill ucs-utils toml-mode tidy term-run tagedit stickyfunc-enhance ssh-config-mode spacemacs-theme smooth-scrolling smeargle slim-mode simple-httpd scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv python pytest pylint pyenv-mode py-yapf popwin pip-requirements persp-mode pcre2el page-break-lines package+ outline-magic org-projectile open-junk-file notmuch-labeler neotree move-text markdown-mode+ macrostep lorem-ipsum log4e list-processes+ linum-relative leuven-theme less-css-mode json-mode js2-refactor js-doc jade-mode info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks emmet-mode elisp-slime-nav elfeed-org ein ebib disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-racer company-c-headers company-anaconda color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap buffer-move browse-kill-ring bracketed-paste bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(paradox-github-token t)
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
+ '(pos-tip-background-color "#073642")
+ '(pos-tip-foreground-color "#93a1a1")
  '(powerline-default-separator nil)
  '(ring-bell-function (quote ignore))
  '(rmh-elfeed-org-files (quote ("~/personal/elfeed.org")))
- '(undo-tree-visualizer-diff nil))
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+ '(term-default-bg-color "#002b36")
+ '(term-default-fg-color "#839496")
+ '(undo-tree-visualizer-diff nil)
+ '(vc-annotate-background nil)
+ '(vc-annotate-background-mode nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#dc322f")
+     (40 . "#c85d17")
+     (60 . "#be730b")
+     (80 . "#b58900")
+     (100 . "#a58e00")
+     (120 . "#9d9100")
+     (140 . "#959300")
+     (160 . "#8d9600")
+     (180 . "#859900")
+     (200 . "#669b32")
+     (220 . "#579d4c")
+     (240 . "#489e65")
+     (260 . "#399f7e")
+     (280 . "#2aa198")
+     (300 . "#2898af")
+     (320 . "#2793ba")
+     (340 . "#268fc6")
+     (360 . "#268bd2"))))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   (quote
+    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83")))
+ '(xterm-color-names
+   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
+ '(xterm-color-names-bright
+   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
+ '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F" :family "Source Code Pro" :foundry "adobe" :slant normal :weight normal :height 151 :width normal))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
