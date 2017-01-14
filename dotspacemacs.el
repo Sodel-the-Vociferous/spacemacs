@@ -520,11 +520,11 @@ layers configuration."
 
         evil-move-cursor-back nil)
 
-  (use-package anaconda-mode
-    :config
-    (spacemacs/helm-gtags-define-keys-for-mode 'anaconda-mode)
-    (add-hook-progn 'anaconda-mode-view-mode-hook
-                    (evil-emacs-state)))
+  ;; (use-package anaconda-mode)
+    ;; :config
+    ;; (spacemacs/helm-gtags-define-keys-for-mode 'anaconda-mode)
+    ;; (add-hook-progn 'anaconda-mode-view-mode-hook
+    ;;                 (evil-emacs-state)))
 
   (use-package evil-rsi
     :diminish evil-rsi-mode
