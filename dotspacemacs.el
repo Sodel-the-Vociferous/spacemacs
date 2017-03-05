@@ -303,6 +303,8 @@ layers configuration."
 
   (setq recentf-save-file "~/.emacs.d/recentf")
 
+  (setq revert-without-query '(".+"))
+
   (setq sentence-end-double-space nil)
 
   (setq shell-command-switch "-lc")
