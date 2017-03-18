@@ -19,9 +19,11 @@
      markdown
      erc
      gtags
-     (auto-completion :variables
-                      auto-completion-return-key-behavior nil
-                      auto-completion-tab-key-behavior 'complete)
+     auto-completion
+     ;; (auto-completion :variables
+     ;;                  ;; auto-completion-complete-with-key-sequence "<C-tab>"
+     ;;                  auto-completion-return-key-behavior nil
+     ;;                  auto-completion-tab-key-behavior 'complete)
      better-defaults
 
      ;; markdown
@@ -34,6 +36,7 @@
      html
      ipython-notebook
      javascript
+     org
      python
      rust
      shell-scripts
@@ -380,34 +383,35 @@ layers configuration."
               (setq c-basic-offset 4)
               (setq tab-width 4)
               (setq indent-tabs-mode nil)))
-  ;; (use-package company
-  ;;  :diminish company-mode
-  ;;  :config (progn
-  ;;            (global-company-mode t)
+  (use-package company
+   :diminish company-mode
+   :config (progn
+             ;; (global-company-mode t)
 
-  ;;               (setq
-  ;;                ;; Helm-company usually pukes if company autocompletion
-  ;;                ;; starts after helm-company is called.
-  ;;                company-idle-delay 0
-  ;;                ;; Get rid of company menu. I'll use helm.
-  ;;                company-frontends
-  ;;                (remove 'company-pseudo-tooltip-unless-just-one-frontend
-  ;;                        company-frontends)
+                (setq
+                 ;; Helm-company usually pukes if company autocompletion
+                 ;; starts after helm-company is called.
+                 company-idle-delay 0.1
+                 ;; Get rid of company menu. I'll use helm.
+                 company-frontends
+                 (remove 'company-pseudo-tooltip-unless-just-one-frontend
+                         company-frontends)
 
-  ;;                company-elisp-detect-function-context nil
-  ;;                company-backends '((company-gtags
-  ;;                                    ;; company-etags
-  ;;                                    company-elisp
-  ;;                                    company-files
-  ;;                                    company-dabbrev
-  ;;                                    company-dabbrev-code
-  ;;                                    company-ropemacs)
-  ;;                                   ;; company-bbdb
-  ;;                                   ;; company-nxml
-  ;;                                   ;; company-css
-  ;;                                   ;; company-clang
-  ;;                                   ;; company-cmake
-  ;;                                   company-dabbrev))))
+                 ;; company-elisp-detect-function-context nil
+                 ;; company-backends '((company-gtags
+                 ;;                     ;; company-etags
+                 ;;                     company-elisp
+                 ;;                     company-files
+                 ;;                     company-dabbrev
+                 ;;                     company-dabbrev-code
+                 ;;                     company-ropemacs)
+                 ;;                    ;; company-bbdb
+                 ;;                    ;; company-nxml
+                 ;;                    ;; company-css
+                 ;;                    ;; company-clang
+                 ;;                    ;; company-cmake
+                 ;;                    company-dabbrev)
+                 )))
   (use-package csv-mode
     :defer t
     :mode "\\.csv\'")
@@ -426,6 +430,7 @@ layers configuration."
     :init (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode))
   (use-package elfeed
     :config (progn
+              (require 'elfeed-search)
               (bind-key "q" 'kill-this-buffer elfeed-search-mode-map)
 
               (setq elfeed-sort-order 'ascending)
@@ -597,7 +602,7 @@ layers configuration."
   (setq helm-google-suggest-use-curl-p t)
 
   (use-package helm-company
-    :bind ("<C-tab>" . helm-company))
+    :bind ("<C-tab>" . complete-symbol))
 
   ;; (use-package helm-gtags
   ;;   :demand t
@@ -636,15 +641,14 @@ layers configuration."
   ;;      helm-gtags-pulse-at-cursor t
   ;;      helm-gtags-suggested-key-mapping t)))
 
-  ;; TODO
-  ;; (bind-key "M-." 'helm-gtags-find-tag helm-gtags-mode-map)
-  ;; (bind-key "M-?" 'helm-gtags-find-pattern helm-gtags-mode-map)))
+  (bind-key "M-?" 'helm-gtags-find-pattern)
 
   ;; Don't jump to other directory when finding new file.
   (setq ido-auto-merge-work-directories-length -1)
 
   (setq
-   projectile-find-file-hook (lambda () (projectile-invalidate-cache nil))
+   ;; projectile-find-file-hook (lambda () (projectile-invalidate-cache nil))
+   projectile-find-file-hook nil
    projectile-enable-caching t
    projectile-completion-system 'helm
    projectile-find-dir-includes-top-level t
@@ -719,7 +723,7 @@ layers configuration."
               ;; tasks in my agenda files.
               (setq
                org-agenda-custom-commands
-               '(("" "Agenda Tasks"
+               '(("o" "Agenda Tasks"
                   ((agenda "" ((org-agenda-overriding-header "== Agenda ==")))
                    (tags-todo "/+WIP" ((org-agenda-overriding-header "Tasks In Progress")
                                        (org-agenda-todo-ignore-deadlines t)
@@ -994,11 +998,11 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ahs-case-fold-search nil)
- '(ahs-default-range (quote ahs-range-whole-buffer))
- '(ahs-idle-interval 0.25)
+ '(ahs-case-fold-search nil t)
+ '(ahs-default-range (quote ahs-range-whole-buffer) t)
+ '(ahs-idle-interval 0.25 t)
  '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil)
+ '(ahs-inhibit-face-list nil t)
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -1043,9 +1047,13 @@ layers configuration."
  '(nrepl-message-colors
    (quote
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
+ '(org-agenda-files
+   (quote
+    ("~/org/music.org" "~/org/navsim.org" "~/org/notebag.org" "~/org/ideas.org" "~/org/journal.org" "~/org/notes.org" "~/org/refile.org" "~/org/todo.org")))
+ '(org-agenda-span (quote fortnight))
  '(package-selected-packages
    (quote
-    (mmm-mode markdown-toc gh-md monokai-theme solarized-theme zenburn-theme-theme zenburn-theme anaconda-mode yapfify uuidgen py-isort pug-mode org-plus-contrib srefactor paradox hydra spinner orgit magit-gitflow helm-flx git-gutter-fringe+ git-gutter+ evil-magit magit magit-popup git-commit with-editor company-quickhelp pos-tip xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe use-package unfill ucs-utils toml-mode tidy term-run tagedit stickyfunc-enhance ssh-config-mode spacemacs-theme smooth-scrolling smeargle slim-mode simple-httpd scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv python pytest pylint pyenv-mode py-yapf popwin pip-requirements persp-mode pcre2el page-break-lines package+ outline-magic org-projectile open-junk-file notmuch-labeler neotree move-text markdown-mode+ macrostep lorem-ipsum log4e list-processes+ linum-relative leuven-theme less-css-mode json-mode js2-refactor js-doc jade-mode info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks emmet-mode elisp-slime-nav elfeed-org ein ebib disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-racer company-c-headers company-anaconda color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap buffer-move browse-kill-ring bracketed-paste bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (web-completion-data gxref org-present org-pomodoro alert gntp org-download htmlize gnuplot mmm-mode markdown-toc gh-md monokai-theme solarized-theme zenburn-theme-theme zenburn-theme anaconda-mode yapfify uuidgen py-isort pug-mode org-plus-contrib srefactor paradox hydra spinner orgit magit-gitflow helm-flx git-gutter-fringe+ git-gutter+ evil-magit magit magit-popup git-commit with-editor company-quickhelp pos-tip xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe use-package unfill ucs-utils toml-mode tidy term-run tagedit stickyfunc-enhance ssh-config-mode spacemacs-theme smooth-scrolling smeargle slim-mode simple-httpd scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv python pytest pylint pyenv-mode py-yapf popwin pip-requirements persp-mode pcre2el page-break-lines package+ outline-magic org-projectile open-junk-file notmuch-labeler neotree move-text markdown-mode+ macrostep lorem-ipsum log4e list-processes+ linum-relative leuven-theme less-css-mode json-mode js2-refactor js-doc jade-mode info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks emmet-mode elisp-slime-nav elfeed-org ein ebib disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-racer company-c-headers company-anaconda color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap buffer-move browse-kill-ring bracketed-paste bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(paradox-github-token t)
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(pos-tip-background-color "#073642")
