@@ -16,19 +16,22 @@
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     yaml
+     csv
      markdown
      erc
+     (elfeed :variables rmh-elfeed-org-files '("~/personal/elfeed.org"))
+     elfeed
      gtags
-     auto-completion
-     ;; (auto-completion :variables
-     ;;                  ;; auto-completion-complete-with-key-sequence "<C-tab>"
-     ;;                  auto-completion-return-key-behavior nil
-     ;;                  auto-completion-tab-key-behavior 'complete)
+     ;; auto-completion
+     (auto-completion :variables
+                      auto-completion-return-key-behavior nil
+                      auto-completion-tab-key-behavior 'complete)
      better-defaults
 
      ;; markdown
-     ;; org
-     c-c++
+     (c-c++ :variables c-c++-enable-clang-support t)
+     python
      common-lisp
      emacs-lisp
      erlang
@@ -40,11 +43,12 @@
      python
      rust
      shell-scripts
-     semantic
+     ;; semantic
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     ;; syntax-checking
+     syntax-checking
+     search-engine
      version-control
      )
    ;; List of additional packages that will be installed without being
@@ -128,6 +132,7 @@
                                       tidy
                                         ;tron-theme
                                         ;tronesque-theme
+                                      tup-mode
                                       ucs-utils
                                       undo-tree
                                       unfill
@@ -139,6 +144,11 @@
                                       ws-butler
                                       xclip
                                       zenburn-theme
+
+                                      irony
+                                      company-irony
+                                      company-racer
+
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(
@@ -274,6 +284,27 @@ before layers configuration."
   (setq evil-toggle-key "C-`"
         evil-want-C-i-jump nil
         evil-want-C-u-scroll nil)
+
+  (setq evil-emacs-state-modes (append '(term-mode
+                                         anaconda-mode-view-mode
+                                         ;; elfeed-search-mode
+                                         ;; elfeed-show-mode
+                                         epa-key-list-mode
+                                         git-rebase-mode
+                                         magit-popup-mode
+                                         magit-blame-mode
+                                         magit-key-mode
+                                         magit-status-mode)
+                                       nil)
+
+        evil-insert-state-modes (append '(org-capture-mode
+                                          global-git-commit-mode
+                                          git-commit-mode
+                                          inferior-ess-mode)
+                                        nil))
+
+
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -312,6 +343,20 @@ layers configuration."
 
   (setq shell-command-switch "-lc")
 
+  ;; (use-package company-irony
+  ;;   :config
+  ;;   (add-hook 'irony-mode-hook (lambda () (cl-pushnew 'company-irony company-backends))))
+
+  ;; (use-package irony
+  ;;   :init
+  ;;   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  ;;   (add-hook 'c++-mode-hook 'irony-mode)
+  ;;   (add-hook 'c-mode-hook 'irony-mode)
+  ;;   (add-hook 'objc-mode-hook 'irony-mode)
+
+  ;; (require 'irony)
+  ;; (require 'company-irony)
+
   (use-package bind-key
     :config
     (progn
@@ -319,11 +364,12 @@ layers configuration."
       (unbind-key "<insert>")
       (unbind-key "<insertchar>")
       ;; HALLELUJAH :)
+      (bind-key "C-x x" 'delete-window)
       (bind-key "C-x <right>" 'next-buffer)
       (bind-key "C-x <left>" 'previous-buffer)
       (bind-key "C-h a" 'helm-apropos)
       (bind-key "C-y" 'helm-show-kill-ring)
-      (bind-key "C-g" 'keyboard-escape-quit)
+      ;; (bind-key "C-g" 'keyboard-escape-quit)
       (bind-key "<mouse-3>" 'mouse-popup-menubar)
       (bind-key "<mouse-8>" (kbd "C-x <left>"))
       (bind-key "<mouse-9>" (kbd "C-x <right>"))
@@ -393,9 +439,9 @@ layers configuration."
                  ;; starts after helm-company is called.
                  company-idle-delay 0.1
                  ;; Get rid of company menu. I'll use helm.
-                 company-frontends
-                 (remove 'company-pseudo-tooltip-unless-just-one-frontend
-                         company-frontends)
+                 ;; company-frontends
+                 ;; (remove 'company-pseudo-tooltip-unless-just-one-frontend
+                 ;;         company-frontends)
 
                  ;; company-elisp-detect-function-context nil
                  ;; company-backends '((company-gtags
@@ -429,14 +475,22 @@ layers configuration."
     :defer t
     :init (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode))
   (use-package elfeed
-    :config (progn
-              (require 'elfeed-search)
-              (bind-key "q" 'kill-this-buffer elfeed-search-mode-map)
+    :config
+    (progn
+      ;; (require 'elfeed-search)
+      ;; (bind-key "q" 'kill-this-buffer elfeed-search-mode-map)
 
-              (setq elfeed-sort-order 'ascending)
-              (setq-default elfeed-search-filter "@2-weeks-ago +unread +daily ")))
-  (use-package elfeed-org
-    :config (elfeed-org))
+      (setq elfeed-sort-order 'ascending)
+
+      (evil-define-key '(visual motion) elfeed-search-mode-map "b" 'elfeed-search-browse-url)
+      ;; (add-hook-progn
+      ;;  'elfeed-search-mode-hook
+      ;;  (bind-key "b" 'elfeed-search-browse-url evil-visual-state-local-map))
+
+      (setq-default elfeed-search-filter "@2-weeks-ago +unread +daily ")))
+
+  ;; (use-package elfeed-org
+  ;;   :config (elfeed-org))
 
   (setq
    erc-port 6697
@@ -447,7 +501,7 @@ layers configuration."
    erc-enable-logging t
    erc-log-write-after-insert t
    erc-log-write-after-send t
-   erc-log-channels-directory (concat "~/org/chats/" system-name "-irc/")
+   erc-log-channels-directory (concat "~/doc/chats/" system-name "-irc/")
    erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"))
 
   (add-hook-progn
@@ -508,31 +562,43 @@ layers configuration."
   (set-default 'evil-symbol-word-search t)
   (add-hook-progn 'git-commit-mode-hook (evil-insert-state))
 
-  (setq evil-emacs-state-modes (append '(term-mode
-                                         anaconda-mode-view-mode
-                                         elfeed-search-mode
-                                         elfeed-show-mode
-                                         epa-key-list-mode
-                                         git-rebase-mode
-                                         magit-popup-mode
-                                         magit-blame-mode
-                                         magit-key-mode
-                                         magit-status-mode)
-                                       evil-emacs-state-modes)
+  ;; (setq evil-emacs-state-modes (append '(term-mode
+  ;;                                        anaconda-mode-view-mode
+  ;;                                        ;; elfeed-search-mode
+  ;;                                        ;; elfeed-show-mode
+  ;;                                        epa-key-list-mode
+  ;;                                        git-rebase-mode
+  ;;                                        magit-popup-mode
+  ;;                                        magit-blame-mode
+  ;;                                        magit-key-mode
+  ;;                                        magit-status-mode)
+  ;;                                      evil-emacs-state-modes)
 
-        evil-insert-state-modes (append '(org-capture-mode
-                                          global-git-commit-mode
-                                          git-commit-mode
-                                          inferior-ess-mode)
-                                        evil-insert-state-modes)
+  ;;       evil-insert-state-modes (append '(org-capture-mode
+  ;;                                         global-git-commit-mode
+  ;;                                         git-commit-mode
+  ;;                                         inferior-ess-mode)
+  ;;                                       evil-insert-state-modes))
 
-        evil-move-cursor-back nil)
+  (setq evil-move-cursor-back nil)
 
-  ;; (use-package anaconda-mode)
-    ;; :config
+  (use-package anaconda-mode
+    :config
+    ;; (setq company-backends (cons 'company-anaconda company-backends))
+    ;; (bind-key "<C-tab>" 'complete-symbol anaconda-mode-map)
     ;; (spacemacs/helm-gtags-define-keys-for-mode 'anaconda-mode)
     ;; (add-hook-progn 'anaconda-mode-view-mode-hook
-    ;;                 (evil-emacs-state)))
+    ;;                 (evil-emacs-state))
+
+
+    )
+
+  (use-package evil-org
+    :init
+    (require 'evil-org)
+    (unbind-key "M-l" evil-org-mode-map)
+    (unbind-key "<insert-state> M-l" evil-org-mode-map)
+    (unbind-key "<normal-state> M-l" evil-org-mode-map))
 
   (use-package evil-rsi
     :diminish evil-rsi-mode
@@ -602,7 +668,7 @@ layers configuration."
   (setq helm-google-suggest-use-curl-p t)
 
   (use-package helm-company
-    :bind ("<C-tab>" . complete-symbol))
+    :bind ("<C-tab>" . helm-company))
 
   ;; (use-package helm-gtags
   ;;   :demand t
@@ -700,14 +766,48 @@ layers configuration."
     ;;        ("C-z C-o <C-right>" . org-demote-subtree)
     ;;        ("C-z C-o <C-left>" . org-promote-subtree))
     ;; :idle (require 'org)
-    :init (defun user/org-iswitchb-agenda ()
-            "call `org-iswitchb' with two prefix args, restricting selection
+    :init
+
+    (defun user/org-iswitchb-agenda ()
+      "call `org-iswitchb' with two prefix args, restricting selection
             to agenda files."
-            (interactive)
-            (org-iswitchb 14))
+      (interactive)
+      (org-iswitchb 14))
+
+    (evil-leader/set-key "a a" 'org-agenda)
+
     :config (progn
               ;; (require 'org-journal)
               ;; (require 'org-toc)
+
+              (defmacro widen-and-maybe-renarrow (&rest body)
+                `(let ((_was-narrowed (buffer-narrowed-p)))
+                  (widen)
+                  (outline-hide-sublevels 1)
+
+                  ,@body
+
+                  (when _was-narrowed
+                    (org-narrow-to-subtree)
+                    (outline-show-subtree))))
+
+              (defun org-goto-and-maybe-renarrow ()
+                (interactive)
+                (widen-and-maybe-renarrow
+                 (call-interactively 'org-goto)))
+
+              (defun org-open-at-point-and-maybe-renarrow ()
+                (interactive)
+                (widen-and-maybe-renarrow
+                 (org-open-at-point)))
+
+              (bind-key [remap org-open-at-point] 'org-open-at-point-and-maybe-renarrow org-mode-map)
+
+              (add-hook 'org-finalize-agenda-hook 'place-agenda-tags)
+              (defun place-agenda-tags ()
+                "Put the agenda tags by the right border of the agenda window."
+                (setq org-agenda-tags-column (- 2 (window-width)))
+                (org-agenda-align-tags))
 
               (add-hook-progn 'org-mode-hook (flycheck-mode -1))
 
@@ -724,23 +824,68 @@ layers configuration."
               (setq
                org-agenda-custom-commands
                '(("o" "Agenda Tasks"
-                  ((agenda "" ((org-agenda-overriding-header "== Agenda ==")))
-                   (tags-todo "/+WIP" ((org-agenda-overriding-header "Tasks In Progress")
+                  (
+                   (agenda "/!-HOLD-FUTURE-REVIEWED" ((org-agenda-overriding-header "== Agenda ==")
+                                                      (org-agenda-span 'week)))
+                   (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+                   (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
                                        (org-agenda-todo-ignore-deadlines t)
                                        (org-tags-match-list-sublevels t)))
-                   (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "Next Tasks")
+
+                   (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                             (org-tags-match-list-sublevels t)))
-                   (tags-todo "/+OnHOLD" ((org-agenda-overriding-header "Tasks On Hold")))
-                   (tags-todo "/+TODO" ((org-agenda-overriding-header "Tasks")
+
+                   (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+
+                   (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
                                         (org-agenda-skip-function '(org-agenda-skip-entry-if
                                                                     'scheduled 'deadline))))
-                   (tags-todo "/FUTURE" ((org-agenda-overriding-header "Future Tasks")
+
+                   (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+                                     (org-tags-match-list-sublevels nil)))
+
+                   (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
                                          (org-agenda-todo-ignore-scheduled t)
                                          (org-agenda-todo-ignore-deadlines t)))
-                   (tags "+REFILE/" ((org-agenda-overriding-header "Tasks to Refile")
-                                     (org-tags-match-list-sublevels nil)))
-                   (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "Tasks to Archive"))))
+
+                   )
+                  nil)
+                 ("k" "Kanban View"
+                  (
+                   (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+                   (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
+                                       (org-agenda-todo-ignore-deadlines t)
+                                       (org-tags-match-list-sublevels t)))
+
+                   (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
+                                            (org-tags-match-list-sublevels t)))
+
+                   (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+
+                   (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
+                                        (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                                                    'scheduled 'deadline))))
+
+                   (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
+                                         (org-agenda-todo-ignore-scheduled t)
+                                         (org-agenda-todo-ignore-deadlines t)))
+
+                   (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+                                                     (org-tags-match-list-sublevels nil)))
+                   (agenda "/!-HOLD-FUTURE-REVIEWED" ((org-agenda-overriding-header "== Agenda ==")
+                                                      (org-agenda-span 'week)))
+                   )
+                  nil)
+                 ("r" "Refile" tags "refile"
+                    ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+                     (org-tags-match-list-sublevels t))
+                    nil)
+                 ("u" "Unfinished Notes" tags "unfinished_note"
+                  ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+                   (org-tags-match-list-sublevels nil))
                   nil)))
+
+              (push "quote" org-protecting-blocks)
 
               (setq
 
@@ -779,7 +924,9 @@ layers configuration."
                                              (search priority-down category-up todo-state-up))
                org-agenda-window-setup 'same-window
 
-               ;; When prompting for an org-mode path, construct the path
+               org-goto-interface 'outline-path-completion
+               org-goto-max-level 2
+               ;; When prompting for an org-mode path, don't construct the path
                ;; incrementally.
                org-outline-path-complete-in-steps nil
                org-refile-use-outline-path 'file
@@ -792,20 +939,16 @@ layers configuration."
 
                ;; Tags
 
-               ;; Don't make children inherit "prj" tag from parent items
-               org-tags-exclude-from-inheritance '("prj")
-
                ;; State Workflow
                org-todo-keywords '(;; Work Statuses
-                                   (sequence "FUTURE(f)"
-                                             "OnHOLD(h@/!)"
-                                             "TODO(t@)"
-                                             "NEXT(n@)"
-                                             "WIP(w@)"
+                                   (sequence "TODO(t)"
+                                             "NEXT(n)"
+                                             "WIP(w)"
                                              "|"
-                                             "DONE(d@)")
+                                             "DONE(d)"
+                                             "REVIEWED(r)")
                                    ;; Extraordinary Statuses
-                                   (sequence "|" "CANCELLED(c@)"))
+                                   (sequence "FUTURE(f)" "|" "CANCELLED(c)"))
 
                ;; Export
 
@@ -837,10 +980,15 @@ layers configuration."
                                               :require-hours t
                                               :minutes ":%02d"
                                               :require-minutes t))))
-  ;; (use-package org-capture
-  ;;   :defer t
-  ;;   ;; :bind ("C-z C-o C-c" . org-capture)
-  ;;   )
+
+  (use-package org-capture
+    :defer t
+    :init
+    (add-hook 'org-capture-mode-hook 'evil-insert-state))
+
+  (use-package org-protocol
+    :demand t)
+
   ;; (org-journal
   ;;  :defer t
   ;;  :require org)
@@ -986,121 +1134,24 @@ layers configuration."
   (save-window-excursion
     (ielm))
 
+  (setq custom-file "~/personal/personal.el")
+
 ;;; Load Private Emacs Config
   (when (file-exists-p "~/personal/personal.el")
     (load "~/personal/personal.el"))
   )
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ahs-case-fold-search nil t)
- '(ahs-default-range (quote ahs-range-whole-buffer) t)
- '(ahs-idle-interval 0.25 t)
- '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil t)
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
- '(compilation-message-face (quote default))
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#839496")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
  '(delete-selection-mode nil)
- '(erc-image-inline-rescale (quote window))
- '(erc-prompt-for-nickserv-password nil)
- '(evil-rsi-mode t)
- '(evil-want-Y-yank-to-eol nil)
- '(expand-region-contract-fast-key "V")
- '(expand-region-reset-fast-key "r")
- '(fci-rule-color "#073642" t)
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
- '(highlight-symbol-colors
-   (--map
-    (solarized-color-blend it "#002b36" 0.25)
-    (quote
-     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
- '(highlight-symbol-foreground-color "#93a1a1")
- '(highlight-tail-colors
-   (quote
-    (("#073642" . 0)
-     ("#546E00" . 20)
-     ("#00736F" . 30)
-     ("#00629D" . 50)
-     ("#7B6000" . 60)
-     ("#8B2C02" . 70)
-     ("#93115C" . 85)
-     ("#073642" . 100))))
- '(hl-bg-colors
-   (quote
-    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
- '(hl-fg-colors
-   (quote
-    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
- '(magit-diff-use-overlays nil)
- '(nrepl-message-colors
-   (quote
-    ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
- '(org-agenda-files
-   (quote
-    ("~/org/music.org" "~/org/navsim.org" "~/org/notebag.org" "~/org/ideas.org" "~/org/journal.org" "~/org/notes.org" "~/org/refile.org" "~/org/todo.org")))
- '(org-agenda-span (quote fortnight))
  '(package-selected-packages
    (quote
-    (web-completion-data gxref org-present org-pomodoro alert gntp org-download htmlize gnuplot mmm-mode markdown-toc gh-md monokai-theme solarized-theme zenburn-theme-theme zenburn-theme anaconda-mode yapfify uuidgen py-isort pug-mode org-plus-contrib srefactor paradox hydra spinner orgit magit-gitflow helm-flx git-gutter-fringe+ git-gutter+ evil-magit magit magit-popup git-commit with-editor company-quickhelp pos-tip xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe use-package unfill ucs-utils toml-mode tidy term-run tagedit stickyfunc-enhance ssh-config-mode spacemacs-theme smooth-scrolling smeargle slim-mode simple-httpd scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv python pytest pylint pyenv-mode py-yapf popwin pip-requirements persp-mode pcre2el page-break-lines package+ outline-magic org-projectile open-junk-file notmuch-labeler neotree move-text markdown-mode+ macrostep lorem-ipsum log4e list-processes+ linum-relative leuven-theme less-css-mode json-mode js2-refactor js-doc jade-mode info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks emmet-mode elisp-slime-nav elfeed-org ein ebib disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-racer company-c-headers company-anaconda color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap buffer-move browse-kill-ring bracketed-paste bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
- '(paradox-github-token t)
- '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
- '(pos-tip-background-color "#073642")
- '(pos-tip-foreground-color "#93a1a1")
- '(powerline-default-separator nil)
- '(ring-bell-function (quote ignore))
- '(rmh-elfeed-org-files (quote ("~/personal/elfeed.org")))
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
- '(term-default-bg-color "#002b36")
- '(term-default-fg-color "#839496")
- '(undo-tree-visualizer-diff nil)
- '(vc-annotate-background nil)
- '(vc-annotate-background-mode nil)
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
-     (40 . "#c85d17")
-     (60 . "#be730b")
-     (80 . "#b58900")
-     (100 . "#a58e00")
-     (120 . "#9d9100")
-     (140 . "#959300")
-     (160 . "#8d9600")
-     (180 . "#859900")
-     (200 . "#669b32")
-     (220 . "#579d4c")
-     (240 . "#489e65")
-     (260 . "#399f7e")
-     (280 . "#2aa198")
-     (300 . "#2898af")
-     (320 . "#2793ba")
-     (340 . "#268fc6")
-     (360 . "#268bd2"))))
- '(vc-annotate-very-old-color nil)
- '(weechat-color-list
-   (quote
-    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83")))
- '(xterm-color-names
-   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
- '(xterm-color-names-bright
-   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
-
+    (company-c-headers zenburn-theme yapfify yaml-mode xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe uuidgen use-package unfill ucs-utils tup-mode toml-mode toc-org tidy term-run tagedit ssh-config-mode spacemacs-theme solarized-theme smeargle slime-company slim-mode scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv pytest pylint pyenv-mode py-isort pug-mode pip-requirements persp-mode pcre2el paradox package+ outline-magic orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file notmuch-labeler neotree mwim move-text monokai-theme mmm-mode markdown-toc markdown-mode+ magit-gitflow lorem-ipsum livid-mode live-py-mode list-processes+ linum-relative link-hint less-css-mode json-mode js2-refactor js-doc insert-shebang info+ indent-guide ido-vertical-mode hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flycheck-rust flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks engine-mode emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies ein ebib dumb-jump disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-shell company-racer company-irony company-anaconda common-lisp-snippets column-enforce-mode color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap cargo browse-kill-ring bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F" :family "Source Code Pro" :foundry "adobe" :slant normal :weight normal :height 151 :width normal))))
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+ )
