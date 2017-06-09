@@ -487,7 +487,7 @@ layers configuration."
       ;;  'elfeed-search-mode-hook
       ;;  (bind-key "b" 'elfeed-search-browse-url evil-visual-state-local-map))
 
-      (setq-default elfeed-search-filter "@2-weeks-ago +unread +daily ")))
+      (setq-default elfeed-search-filter "@2-weeks-ago -skip +unread +daily ")))
 
   ;; (use-package elfeed-org
   ;;   :config (elfeed-org))
