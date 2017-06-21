@@ -295,7 +295,8 @@ Will work on both org-mode and any mode that accepts plain html."
         "aos" 'org-search-view
         "aot" 'org-todo-list
         ;; SPC C- capture/colors
-        "Cc" 'org-capture)
+        "Cc" 'org-capture
+        "aoj" 'spacemacs/org-goto-in-agenda-files)
 
       (define-key global-map "\C-cl" 'org-store-link)
       (define-key global-map "\C-ca" 'org-agenda)

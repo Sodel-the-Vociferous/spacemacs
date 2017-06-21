@@ -44,3 +44,18 @@
 (defun spacemacs//evil-org-mode ()
   (evil-org-mode)
   (evil-normalize-keymaps))
+
+
+
+(defun spacemacs/org-goto-in-agenda-files ()
+  "Prompt the user for a refile target entry and, instead of refiling, jump to it."
+  (interactive)
+  (let* ((default-buffer (save-window-excursion
+                           (find-file (car org-agenda-files))
+                           (current-buffer)))
+         (loc (org-refile-get-location nil default-buffer))
+         (file (nth 1 loc))
+         (pos (nth 3 loc)))
+    (find-file file)
+    (goto-char pos)
+    (org-show-context)))
