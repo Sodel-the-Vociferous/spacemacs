@@ -775,217 +775,225 @@ layers configuration."
       (interactive)
       (org-iswitchb 14))
 
-    (evil-leader/set-key "a a" 'org-agenda)
+    (spacemacs/set-leader-keys
+      "aa" 'org-agenda)
+    (spacemacs/set-leader-keys-for-major-mode 'org-mode
+      "j g" 'org-goto
+      "j c" 'org-clock-goto)
 
-    :config (progn
-              ;; (require 'org-journal)
-              ;; (require 'org-toc)
+    :config
 
-              (defmacro widen-and-maybe-renarrow (&rest body)
-                `(let ((_was-narrowed (buffer-narrowed-p)))
-                  (widen)
-                  (outline-hide-sublevels 1)
+    (defmacro widen-and-maybe-renarrow (&rest body)
+      `(let ((_was-narrowed (buffer-narrowed-p)))
+         (widen)
+         (outline-hide-sublevels 1)
 
-                  ,@body
+         ,@body
 
-                  (when _was-narrowed
-                    (org-narrow-to-subtree)
-                    (outline-show-subtree))))
+         (when _was-narrowed
+           (org-narrow-to-subtree)
+           (outline-show-subtree))))
 
-              (defun org-goto-and-maybe-renarrow ()
-                (interactive)
-                (widen-and-maybe-renarrow
-                 (call-interactively 'org-goto)))
+    (defun org-goto-and-maybe-renarrow ()
+      (interactive)
+      (widen-and-maybe-renarrow
+       (call-interactively 'org-goto)))
 
-              (defun org-open-at-point-and-maybe-renarrow ()
-                (interactive)
-                (widen-and-maybe-renarrow
-                 (org-open-at-point)))
+    (defun org-open-at-point-and-maybe-renarrow ()
+      (interactive)
+      (widen-and-maybe-renarrow
+       (org-open-at-point)))
 
-              (bind-key [remap org-open-at-point] 'org-open-at-point-and-maybe-renarrow org-mode-map)
+    (bind-key [remap org-open-at-point] 'org-open-at-point-and-maybe-renarrow org-mode-map)
 
-              (add-hook 'org-finalize-agenda-hook 'place-agenda-tags)
-              (defun place-agenda-tags ()
-                "Put the agenda tags by the right border of the agenda window."
-                (setq org-agenda-tags-column (- 2 (window-width)))
-                (org-agenda-align-tags))
+    (add-hook 'org-finalize-agenda-hook 'place-agenda-tags)
+    (defun place-agenda-tags ()
+      "Put the agenda tags by the right border of the agenda window."
+      (setq org-agenda-tags-column (- 2 (window-width)))
+      (org-agenda-align-tags))
 
-              (add-hook-progn 'org-mode-hook (flycheck-mode -1))
+    (add-hook-progn 'org-mode-hook
+                    (flycheck-mode -1))
 
-              ;; For `helm-show-kill-ring'
-              (unbind-key "C-y" org-mode-map)
+    ;; For `helm-show-kill-ring'
+    (unbind-key "C-y" org-mode-map)
 
-              ;; Default binding for <C-tab> is dumb. I want
-              ;; `helm-company', dammit!
-              (unbind-key "<C-tab>" org-mode-map)
-              (bind-key "<C-M-tab>" 'org-force-cycle-archived org-mode-map)
+    ;; Default binding for <C-tab> is dumb. I want
+    ;; `helm-company', dammit!
+    (unbind-key "<C-tab>" org-mode-map)
+    (bind-key "<C-M-tab>" 'org-force-cycle-archived org-mode-map)
 
-              ;; Make "C-z C-o a <RET>" display an overview of all
-              ;; tasks in my agenda files.
-              (setq
-               org-agenda-custom-commands
-               '(("o" "Agenda Tasks"
-                  (
-                   (agenda "/!-HOLD-FUTURE-REVIEWED" ((org-agenda-overriding-header "== Agenda ==")
-                                                      (org-agenda-span 'week)))
-                   (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
-                   (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
-                                       (org-agenda-todo-ignore-deadlines t)
-                                       (org-tags-match-list-sublevels t)))
+    ;; Make "C-z C-o a <RET>" display an overview of all
+    ;; tasks in my agenda files.
+    (setq
+     org-agenda-custom-commands
+     '(("o" "Agenda Tasks"
+        (
+         (agenda "/!-HOLD-FUTURE-RETAIN" ((org-agenda-overriding-header "== Agenda ==")
+                                          (org-agenda-span 'week)))
+         (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+         (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
+                            (org-agenda-todo-ignore-deadlines t)
+                            (org-tags-match-list-sublevels t)))
 
-                   (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
-                                            (org-tags-match-list-sublevels t)))
+         (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
+                                  (org-tags-match-list-sublevels t)))
 
-                   (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+         (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
-                   (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
-                                        (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                                                    'scheduled 'deadline))))
+         (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
+                             (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                                         'scheduled 'deadline))))
 
-                   (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
-                                     (org-tags-match-list-sublevels nil)))
+         (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+                                         (org-tags-match-list-sublevels nil)))
 
-                   (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
-                                         (org-agenda-todo-ignore-scheduled t)
-                                         (org-agenda-todo-ignore-deadlines t)))
+         (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
+                               (org-agenda-todo-ignore-scheduled t)
+                               (org-agenda-todo-ignore-deadlines t)))
 
-                   )
-                  nil)
-                 ("k" "Kanban View"
-                  (
-                   (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
-                   (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
-                                       (org-agenda-todo-ignore-deadlines t)
-                                       (org-tags-match-list-sublevels t)))
+         )
+        nil)
+       ("k" "Kanban View"
+        (
+         (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+         (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
+                            (org-agenda-todo-ignore-deadlines t)
+                            (org-tags-match-list-sublevels t)))
 
-                   (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
-                                            (org-tags-match-list-sublevels t)))
+         (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
+                                  (org-tags-match-list-sublevels t)))
 
-                   (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+         (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
-                   (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
-                                        (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                                                    'scheduled 'deadline))))
+         (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
+                             (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                                         'scheduled 'deadline))))
 
-                   (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
-                                         (org-agenda-todo-ignore-scheduled t)
-                                         (org-agenda-todo-ignore-deadlines t)))
+         (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
+                               (org-agenda-todo-ignore-scheduled t)
+                               (org-agenda-todo-ignore-deadlines t)))
 
-                   (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
-                                                     (org-tags-match-list-sublevels nil)))
-                   (agenda "/!-HOLD-FUTURE-REVIEWED" ((org-agenda-overriding-header "== Agenda ==")
-                                                      (org-agenda-span 'week)))
-                   )
-                  nil)
-                 ("r" "Refile" tags "refile"
-                    ((org-agenda-overriding-header "REFILE & Unfinished Notes")
-                     (org-tags-match-list-sublevels t))
-                    nil)
-                 ("u" "Unfinished Notes" tags "unfinished_note"
-                  ((org-agenda-overriding-header "REFILE & Unfinished Notes")
-                   (org-tags-match-list-sublevels nil))
-                  nil)))
+         (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+                                         (org-tags-match-list-sublevels nil)))
+         (agenda "/!-HOLD-FUTURE-RETAIN" ((org-agenda-overriding-header "== Agenda ==")
+                                          (org-agenda-span 'week)))
+         )
+        nil)
+       ("r" "Refile" tags "refile"
+        ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+         (org-tags-match-list-sublevels t))
+        nil)
+       ("u" "Unfinished Notes" tags "unfinished_note"
+        ((org-agenda-overriding-header "REFILE & Unfinished Notes")
+         (org-tags-match-list-sublevels nil))
+        nil)))
 
-              (push "quote" org-protecting-blocks)
+    (push "quote" org-protecting-blocks)
 
-              (setq
+    (setq
 
-               ;; Render special formatting in buffer
-               org-pretty-entities t
-               org-pretty-entities-include-sub-superscripts t
-               org-columns-default-format (concat "%45ITEM "
+     ;; Render special formatting in buffer
+     org-pretty-entities t
+     org-pretty-entities-include-sub-superscripts t
+     org-columns-default-format (concat "%45ITEM "
+                                        "%TODO "
+                                        "%3PRIORITY "
+                                        "%6Effort(Effort){:} "
+                                        "%6CLOCKSUM(Time){:}")
+
+     ;; Org Capture
+     org-default-notes-file "~/personal/refile.org"
+     org-cycle-separator-lines 2
+
+     ;; Org Journal
+     org-journal-dir "~/org/journal/"
+
+     ;; Org Agenda
+     org-agenda-start-on-weekday nil
+     org-agenda-start-with-clockreport-mode nil
+     org-agenda-start-with-log-mode t
+     org-agenda-skip-additional-timestamps-same-entry t
+     org-agenda-dim-blocked-tasks nil
+     org-agenda-overriding-columns-format (concat "%CATEGORY "
+                                                  "%45ITEM "
                                                   "%TODO "
                                                   "%3PRIORITY "
                                                   "%6Effort(Effort){:} "
                                                   "%6CLOCKSUM(Time){:}")
+     org-agenda-remove-tags 'prefix
+     org-agenda-sorting-strategy '((agenda time-up priority-down habit-down category-up)
+                                   (todo priority-down category-up todo-state-up)
+                                   (tags priority-down category-up todo-state-up)
+                                   (search priority-down category-up todo-state-up))
+     org-agenda-window-setup 'same-window
 
-               ;; Org Capture
-               org-default-notes-file "~/personal/refile.org"
-               org-cycle-separator-lines 2
+     org-goto-interface 'outline-path-completion
+     org-goto-max-level 2
+     ;; When prompting for an org-mode path, don't construct the path
+     ;; incrementally.
+     org-outline-path-complete-in-steps nil
+     org-refile-use-outline-path 'file
+     ;; When refiling to a parent node that doesn't exist, prompt to
+     ;; create it.
+     org-refile-allow-creating-parent-nodes 'confirm
+     org-completion-use-ido t
+     ido-everywhere t
+     ido-max-directory-size 100000
 
-               ;; Org Journal
-               org-journal-dir "~/org/journal/"
+     ;; Tags
 
-               ;; Org Agenda
-               org-agenda-start-on-weekday nil
-               org-agenda-start-with-clockreport-mode nil
-               org-agenda-start-with-log-mode t
-               org-agenda-skip-additional-timestamps-same-entry t
-               org-agenda-dim-blocked-tasks nil
-               org-agenda-overriding-columns-format (concat "%CATEGORY "
-                                                            "%45ITEM "
-                                                            "%TODO "
-                                                            "%3PRIORITY "
-                                                            "%6Effort(Effort){:} "
-                                                            "%6CLOCKSUM(Time){:}")
-               org-agenda-remove-tags 'prefix
-               org-agenda-sorting-strategy '((agenda time-up priority-down habit-down category-up)
-                                             (todo priority-down category-up todo-state-up)
-                                             (tags priority-down category-up todo-state-up)
-                                             (search priority-down category-up todo-state-up))
-               org-agenda-window-setup 'same-window
+     ;; State Workflow
+     org-todo-keywords '(;; Work Statuses
+                         (sequence "TODO(t)"
+                                   "NEXT(n)"
+                                   "PLANNING(p)"
+                                   "WIP(w)"
+                                   "|"
+                                   "DONE(d)")
+                         ;; Extraordinary Statuses
+                         (sequence "FUTURE(f)" "HOLD(h)" "|" "RETAIN(r)" "CANCELLED(c)"))
 
-               org-goto-interface 'outline-path-completion
-               org-goto-max-level 2
-               ;; When prompting for an org-mode path, don't construct the path
-               ;; incrementally.
-               org-outline-path-complete-in-steps nil
-               org-refile-use-outline-path 'file
-               ;; When refiling to a parent node that doesn't exist, prompt to
-               ;; create it.
-               org-refile-allow-creating-parent-nodes 'confirm
-               org-completion-use-ido t
-               ido-everywhere t
-               ido-max-directory-size 100000
+     ;; Export
 
-               ;; Tags
+     org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
+     org-export-creator-info nil
+     org-export-with-sub-superscripts t
+     ;; When exporting to ODT, convert it to a PDF, too
+     org-export-odt-preferred-output-format "pdf"
+     ;; Remove logfiles after exporting a PDF
+     org-export-pdf-remove-logfiles t
 
-               ;; State Workflow
-               org-todo-keywords '(;; Work Statuses
-                                   (sequence "TODO(t)"
-                                             "NEXT(n)"
-                                             "WIP(w)"
-                                             "|"
-                                             "DONE(d)"
-                                             "REVIEWED(r)")
-                                   ;; Extraordinary Statuses
-                                   (sequence "FUTURE(f)" "|" "CANCELLED(c)"))
+     ;; Time/Clocking
 
-               ;; Export
-
-               org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
-               org-export-creator-info nil
-               org-export-with-sub-superscripts t
-               ;; When exporting to ODT, convert it to a PDF, too
-               org-export-odt-preferred-output-format "pdf"
-               ;; Remove logfiles after exporting a PDF
-               org-export-pdf-remove-logfiles t
-
-               ;; Time/Clocking
-
-               ;; Don't prompt for a note when clocking out
-               org-log-note-clock-out nil
-               org-clock-clocktable-default-properties '(:maxlevel 4 :scope file)
-               ;; Don't always default to dates in the future
-               org-read-date-prefer-future nil
-               org-clock-out-remove-zero-time-clocks t
-               org-clock-persist t
-               ;; Do not prompt to resume an active clock
-               org-clock-persist-query-resume nil
-               ;; Include current clock task in clock reports
-               org-clock-report-include-clocking-task t
-               org-edit-timestamp-down-means-later nil
-               org-log-done 'time
-               org-log-into-drawer t
-               org-time-clocksum-format (list :hours "%d"
-                                              :require-hours t
-                                              :minutes ":%02d"
-                                              :require-minutes t))))
+     ;; Don't prompt for a note when clocking out
+     org-log-note-clock-out nil
+     org-clock-clocktable-default-properties '(:maxlevel 4 :scope file)
+     ;; Don't always default to dates in the future
+     org-read-date-prefer-future nil
+     org-clock-out-remove-zero-time-clocks t
+     org-clock-persist t
+     ;; Do not prompt to resume an active clock
+     org-clock-persist-query-resume nil
+     ;; Include current clock task in clock reports
+     org-clock-report-include-clocking-task t
+     org-edit-timestamp-down-means-later nil
+     org-log-done 'time
+     org-log-into-drawer t
+     org-time-clocksum-format (list :hours "%d"
+                                    :require-hours t
+                                    :minutes ":%02d"
+                                    :require-minutes t)))
 
   (use-package org-capture
-    :defer t
+    :defer 10
     :init
     (add-hook 'org-capture-mode-hook 'evil-insert-state))
+
+  (use-package org-indent
+    :init
+    (add-hook-progn 'org-mode-hook
+                    (org-indent-mode)))
 
   (use-package org-protocol
     :demand t)
@@ -1141,3 +1149,17 @@ layers configuration."
   (when (file-exists-p "~/personal/personal.el")
     (load "~/personal/personal.el"))
   )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (helm-flx zenburn-theme yapfify yaml-mode xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe uuidgen use-package unfill ucs-utils tup-mode toml-mode toc-org tidy term-run tagedit ssh-config-mode spacemacs-theme smeargle slime-company slim-mode scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv pytest pylint pyenv-mode py-isort pug-mode pip-requirements persp-mode pcre2el paradox package+ outline-magic orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file notmuch-labeler neotree mwim move-text mmm-mode markdown-toc markdown-mode+ magit-gitflow lorem-ipsum livid-mode live-py-mode list-processes+ linum-relative link-hint less-css-mode json-mode js2-refactor js-doc insert-shebang info+ indent-guide ido-vertical-mode hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flycheck-rust flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks engine-mode emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies ein ebib dumb-jump disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-shell company-racer company-irony company-c-headers company-anaconda common-lisp-snippets column-enforce-mode color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap cargo browse-kill-ring bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
