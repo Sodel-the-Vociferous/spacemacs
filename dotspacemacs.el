@@ -112,7 +112,9 @@
                                       notmuch
                                       notmuch-labeler
                                       nxml
+                                      org-caldav
                                       org-projectile
+                                      helm-org-rifle
                                       outline-magic
                                       package+
                                       persistent-soft
@@ -147,6 +149,7 @@
                                       zenburn-theme
 
                                       irony
+                                      flycheck-irony
                                       company-irony
                                       company-racer
 
@@ -282,6 +285,9 @@ before layers configuration."
                            ("MELPA" . "http://melpa.org/packages/")
                            ("gnu" . "http://elpa.gnu.org/packages/")))
   (package-initialize)
+
+  (put 'narrow-to-page 'disabled nil)
+
   (setq evil-toggle-key "C-`"
         evil-want-C-i-jump nil
         evil-want-C-u-scroll nil)
@@ -348,15 +354,16 @@ layers configuration."
   ;;   :config
   ;;   (add-hook 'irony-mode-hook (lambda () (cl-pushnew 'company-irony company-backends))))
 
-  ;; (use-package irony
-  ;;   :init
-  ;;   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-  ;;   (add-hook 'c++-mode-hook 'irony-mode)
-  ;;   (add-hook 'c-mode-hook 'irony-mode)
-  ;;   (add-hook 'objc-mode-hook 'irony-mode)
+  (use-package irony
+    :init
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    (add-hook 'objc-mode-hook 'irony-mode))
 
-  ;; (require 'irony)
-  ;; (require 'company-irony)
+  (use-package flycheck-irony
+    :init
+    (add-hook 'flycheck-mode-hook 'flycheck-irony-setup))
 
   (use-package bind-key
     :config
@@ -753,6 +760,15 @@ layers configuration."
     :defer t
     :mode "\\.xml'"
     :config (setq nxml-child-indent 2))
+
+  (use-package org-caldav
+    :init
+    (add-hook-progn 'org-mode-hook (require 'org-caldav)))
+
+  (use-package helm-org-rifle
+    :init
+    (spacemacs/set-leader-keys "aoj" 'helm-org-rifle-agenda-files))
+
   (use-package org
     :defer t
     :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
@@ -839,7 +855,7 @@ layers configuration."
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                   (org-tags-match-list-sublevels t)))
 
-         (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+         (tags-todo "/HOLD|BILLING" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
          (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
                              (org-agenda-skip-function '(org-agenda-skip-entry-if
@@ -864,7 +880,7 @@ layers configuration."
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                   (org-tags-match-list-sublevels t)))
 
-         (tags-todo "/HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+         (tags-todo "/HOLD|BILLING" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
          (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
                              (org-agenda-skip-function '(org-agenda-skip-entry-if
@@ -950,6 +966,7 @@ layers configuration."
                                    "PLANNING(p)"
                                    "WIP(w)"
                                    "|"
+                                   "BILLING(b)"
                                    "DONE(d)")
                          ;; Extraordinary Statuses
                          (sequence "FUTURE(f)" "HOLD(h)" "|" "RETAIN(r)" "CANCELLED(c)"))
@@ -1149,17 +1166,3 @@ layers configuration."
   (when (file-exists-p "~/personal/personal.el")
     (load "~/personal/personal.el"))
   )
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (helm-flx zenburn-theme yapfify yaml-mode xclip ws-butler wrap-region window-numbering window-jump which-key web-mode web-beautify wc-mode volatile-highlights vi-tilde-fringe uuidgen use-package unfill ucs-utils tup-mode toml-mode toc-org tidy term-run tagedit ssh-config-mode spacemacs-theme smeargle slime-company slim-mode scss-mode scala-mode sass-mode restart-emacs regex-dsl rainbow-delimiters racer quelpa pyvenv pytest pylint pyenv-mode py-isort pug-mode pip-requirements persp-mode pcre2el paradox package+ outline-magic orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file notmuch-labeler neotree mwim move-text mmm-mode markdown-toc markdown-mode+ magit-gitflow lorem-ipsum livid-mode live-py-mode list-processes+ linum-relative link-hint less-css-mode json-mode js2-refactor js-doc insert-shebang info+ indent-guide ido-vertical-mode hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md ggtags flymake-python-pyflakes flymake-json flymake-jslint flylisp flycheck-rust flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-rsi evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu erlang erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks engine-mode emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies ein ebib dumb-jump disaster dired-single dired-efap dired+ diff-hl define-word cython-mode ctable csv-mode crontab-mode concurrent company-web company-tern company-statistics company-shell company-racer company-irony company-c-headers company-anaconda common-lisp-snippets column-enforce-mode color-theme coffee-mode cmake-mode clean-aindent-mode clang-format charmap cargo browse-kill-ring bash-completion auto-yasnippet auto-highlight-symbol auto-dim-other-buffers auto-compile auto-async-byte-compile ascii aggressive-indent aes adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
