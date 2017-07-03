@@ -88,6 +88,7 @@
                                       eldoc
                                       elfeed
                                       elfeed-org
+                                      emms
                                       evil-rsi
                                       expand-region
                                       f
