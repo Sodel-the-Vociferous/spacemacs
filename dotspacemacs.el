@@ -853,23 +853,23 @@ layers configuration."
          (agenda "/!-HOLD-FUTURE-RETAIN" ((org-agenda-overriding-header "== Agenda ==")
                                           (org-agenda-span 'week)))
          (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
-         (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
+         (todo "QATest|WIP" ((org-agenda-overriding-header "WIP - In Progress")
                             (org-agenda-todo-ignore-deadlines t)
                             (org-tags-match-list-sublevels t)))
 
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                   (org-tags-match-list-sublevels t)))
 
-         (tags-todo "/HOLD|BILLING" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+         (todo "HOLD|BILLING" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
-         (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
+         (todo "TODO" ((org-agenda-overriding-header "TODO Tasks")
                              (org-agenda-skip-function '(org-agenda-skip-entry-if
                                                          'scheduled 'deadline))))
 
          (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
                                          (org-tags-match-list-sublevels nil)))
 
-         (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
+         (todo "FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
                                (org-agenda-todo-ignore-scheduled t)
                                (org-agenda-todo-ignore-deadlines t)))
 
@@ -878,20 +878,20 @@ layers configuration."
        ("k" "Kanban View"
         (
          (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
-         (tags-todo "/WIP" ((org-agenda-overriding-header "WIP - In Progress")
+         (todo "QATest|WIP" ((org-agenda-overriding-header "WIP - In Progress")
                             (org-agenda-todo-ignore-deadlines t)
                             (org-tags-match-list-sublevels t)))
 
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                   (org-tags-match-list-sublevels t)))
 
-         (tags-todo "/HOLD|BILLING" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
+         (todo "BILLING|HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
-         (tags-todo "/TODO" ((org-agenda-overriding-header "TODO Tasks")
+         (todo "TODO" ((org-agenda-overriding-header "TODO Tasks")
                              (org-agenda-skip-function '(org-agenda-skip-entry-if
                                                          'scheduled 'deadline))))
 
-         (tags-todo "/FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
+         (todo "FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
                                (org-agenda-todo-ignore-scheduled t)
                                (org-agenda-todo-ignore-deadlines t)))
 
@@ -935,7 +935,7 @@ layers configuration."
      org-agenda-start-with-clockreport-mode nil
      org-agenda-start-with-log-mode t
      org-agenda-skip-additional-timestamps-same-entry t
-     org-agenda-dim-blocked-tasks nil
+     org-agenda-dim-blocked-tasks t
      org-agenda-overriding-columns-format (concat "%CATEGORY "
                                                   "%45ITEM "
                                                   "%TODO "
@@ -965,16 +965,16 @@ layers configuration."
      ;; Tags
 
      ;; State Workflow
+     org-enforce-todo-dependencies t
      org-todo-keywords '(;; Work Statuses
                          (sequence "TODO(t)"
                                    "NEXT(n)"
-                                   "PLANNING(p)"
                                    "WIP(w)"
                                    "|"
-                                   "BILLING(b)"
+                                   "QATest(q)"
                                    "DONE(d)")
                          ;; Extraordinary Statuses
-                         (sequence "FUTURE(f)" "HOLD(h)" "|" "RETAIN(r)" "CANCELLED(c)"))
+                         (sequence "FUTURE(f)" "PROJECT(p)"  "HOLD(h)" "|" "RETAIN(r)" "CANCELLED(c)" "BILLING(b)"))
 
      ;; Export
 
