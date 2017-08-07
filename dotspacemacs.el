@@ -319,6 +319,11 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
+  ;; Load Private Emacs Config
+  (setq custom-file "~/personal/personal.el")
+  (when (file-exists-p custom-file)
+    (load custom-file))
+
   ;; Startup & Shutdown
   (setq
    inhibit-startup-screen t
@@ -1158,11 +1163,4 @@ layers configuration."
 
   ;; I want to start with an ielm buffer open
   (save-window-excursion
-    (ielm))
-
-  (setq custom-file "~/personal/personal.el")
-
-;;; Load Private Emacs Config
-  (when (file-exists-p "~/personal/personal.el")
-    (load "~/personal/personal.el"))
-  )
+    (ielm)))
