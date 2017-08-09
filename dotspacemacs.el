@@ -974,7 +974,7 @@ layers configuration."
                                    "QATest(q)"
                                    "DONE(d)")
                          ;; Extraordinary Statuses
-                         (sequence "FUTURE(f)" "PROJECT(p)"  "HOLD(h)" "|" "RETAIN(r)" "CANCELLED(c)" "BILLING(b)"))
+                         (sequence "FUTURE(f)" "PROJECT(p)"  "HOLD(h@)" "|" "RETAIN(r)" "CANCELLED(c)" "BILLING(b)"))
 
      ;; Export
 
