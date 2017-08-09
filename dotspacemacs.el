@@ -2,6 +2,8 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
+(setq custom-file "~/personal/personal.el")
+
 (defmacro add-hook-progn (hook &rest body)
   `(add-hook ,hook
              (lambda () . ,body)))
@@ -320,7 +322,6 @@ before layers configuration."
 layers configuration."
 
   ;; Load Private Emacs Config
-  (setq custom-file "~/personal/personal.el")
   (when (file-exists-p custom-file)
     (load custom-file))
 
