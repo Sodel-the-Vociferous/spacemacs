@@ -288,6 +288,10 @@ before layers configuration."
                            ("gnu" . "http://elpa.gnu.org/packages/")))
   (package-initialize)
 
+  ;; Load Private Emacs Config
+  (when (file-exists-p custom-file)
+    (load custom-file))
+
   (put 'narrow-to-page 'disabled nil)
 
   (setq evil-toggle-key "C-`"
@@ -320,10 +324,6 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
-
-  ;; Load Private Emacs Config
-  (when (file-exists-p custom-file)
-    (load custom-file))
 
   ;; Startup & Shutdown
   (setq
