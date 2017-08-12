@@ -444,34 +444,34 @@ layers configuration."
               (setq tab-width 4)
               (setq indent-tabs-mode nil)))
   (use-package company
-   :diminish company-mode
-   :config (progn
-             ;; (global-company-mode t)
+    :diminish company-mode
+    :config (progn
+              ;; (global-company-mode t)
 
-                (setq
-                 ;; Helm-company usually pukes if company autocompletion
-                 ;; starts after helm-company is called.
-                 company-idle-delay 0.1
-                 ;; Get rid of company menu. I'll use helm.
-                 ;; company-frontends
-                 ;; (remove 'company-pseudo-tooltip-unless-just-one-frontend
-                 ;;         company-frontends)
+              (setq
+               ;; Helm-company usually pukes if company autocompletion
+               ;; starts after helm-company is called.
+               company-idle-delay 0.1
+               ;; Get rid of company menu. I'll use helm.
+               ;; company-frontends
+               ;; (remove 'company-pseudo-tooltip-unless-just-one-frontend
+               ;;         company-frontends)
 
-                 ;; company-elisp-detect-function-context nil
-                 ;; company-backends '((company-gtags
-                 ;;                     ;; company-etags
-                 ;;                     company-elisp
-                 ;;                     company-files
-                 ;;                     company-dabbrev
-                 ;;                     company-dabbrev-code
-                 ;;                     company-ropemacs)
-                 ;;                    ;; company-bbdb
-                 ;;                    ;; company-nxml
-                 ;;                    ;; company-css
-                 ;;                    ;; company-clang
-                 ;;                    ;; company-cmake
-                 ;;                    company-dabbrev)
-                 )))
+               ;; company-elisp-detect-function-context nil
+               ;; company-backends '((company-gtags
+               ;;                     ;; company-etags
+               ;;                     company-elisp
+               ;;                     company-files
+               ;;                     company-dabbrev
+               ;;                     company-dabbrev-code
+               ;;                     company-ropemacs)
+               ;;                    ;; company-bbdb
+               ;;                    ;; company-nxml
+               ;;                    ;; company-css
+               ;;                    ;; company-clang
+               ;;                    ;; company-cmake
+               ;;                    company-dabbrev)
+               )))
   (use-package csv-mode
     :defer t
     :mode "\\.csv\'")
@@ -656,8 +656,8 @@ layers configuration."
   (use-package function-args :defer t)
   ;; (git-blame :defer t)
   (use-package git-commit
-  :demand t
-  :config (global-git-commit-mode 1))
+    :demand t
+    :config (global-git-commit-mode 1))
   ;; (git-modeline
   ;;  :config (setq git-state-modeline-decoration 'git-state-decoration-letter))
   ;; (use-package git-rebase :defer t)
@@ -1084,8 +1084,8 @@ layers configuration."
               ;; whether or not emacs was started within tmux.
               (setenv "TMUX" "")))
   (use-package term-run
-   :init
-   (evil-leader/set-key "M-!" 'term-run-shell-command))
+    :init
+    (evil-leader/set-key "M-!" 'term-run-shell-command))
   (use-package tidy
     :defer t
     :commands tidy-buffer
