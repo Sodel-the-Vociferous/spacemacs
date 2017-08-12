@@ -851,12 +851,11 @@ layers configuration."
      org-agenda-custom-commands
      '(("o" "Agenda Tasks"
         (
-         (agenda "/!-HOLD-FUTURE-RETAIN" ((org-agenda-overriding-header "== Agenda ==")
-                                          (org-agenda-span 'week)))
-         (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
-         (todo "QATest|WIP" ((org-agenda-overriding-header "WIP - In Progress")
-                            (org-agenda-todo-ignore-deadlines t)
-                            (org-tags-match-list-sublevels t)))
+         (agenda "/!-HOLD-FUTURE" ((org-agenda-overriding-header "== Agenda ==")
+                                   (org-agenda-span 'week)))
+         (todo "STARTED" ((org-agenda-overriding-header "STARTED - In Progress")
+                                 (org-agenda-todo-ignore-deadlines t)
+                                 (org-tags-match-list-sublevels t)))
 
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                   (org-tags-match-list-sublevels t)))
@@ -864,24 +863,25 @@ layers configuration."
          (todo "HOLD|BILLING" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
          (todo "TODO" ((org-agenda-overriding-header "TODO Tasks")
-                             (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                                         'scheduled 'deadline))))
+                       (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                                   'scheduled 'deadline))))
 
          (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
                                          (org-tags-match-list-sublevels nil)))
 
          (todo "FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
-                               (org-agenda-todo-ignore-scheduled t)
-                               (org-agenda-todo-ignore-deadlines t)))
-
+                         (org-agenda-todo-ignore-scheduled t)
+                         (org-agenda-todo-ignore-deadlines t)))
+         (tags "-archived-event/DONE|VERIFY|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
          )
         nil)
        ("k" "Kanban View"
         (
-         (tags "-archived-event/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
-         (todo "QATest|WIP" ((org-agenda-overriding-header "WIP - In Progress")
-                            (org-agenda-todo-ignore-deadlines t)
-                            (org-tags-match-list-sublevels t)))
+         (agenda "/!-HOLD-FUTURE" ((org-agenda-overriding-header "== Agenda ==")
+                                   (org-agenda-span 'day)))
+         (todo "STARTED" ((org-agenda-overriding-header "STARTED - In Progress")
+                                 (org-agenda-todo-ignore-deadlines t)
+                                 (org-tags-match-list-sublevels t)))
 
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                   (org-tags-match-list-sublevels t)))
@@ -889,17 +889,16 @@ layers configuration."
          (todo "BILLING|HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
 
          (todo "TODO" ((org-agenda-overriding-header "TODO Tasks")
-                             (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                                         'scheduled 'deadline))))
+                       (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                                   'scheduled 'deadline))))
 
          (todo "FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
-                               (org-agenda-todo-ignore-scheduled t)
-                               (org-agenda-todo-ignore-deadlines t)))
+                         (org-agenda-todo-ignore-scheduled t)
+                         (org-agenda-todo-ignore-deadlines t)))
 
          (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
                                          (org-tags-match-list-sublevels nil)))
-         (agenda "/!-HOLD-FUTURE-RETAIN" ((org-agenda-overriding-header "== Agenda ==")
-                                          (org-agenda-span 'week)))
+         (tags "-archived-event/DONE|VERIFY|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
          )
         nil)
        ("r" "Refile" tags "refile"
@@ -909,6 +908,12 @@ layers configuration."
        ("u" "Unfinished Notes" tags "unfinished_note"
         ((org-agenda-overriding-header "REFILE & Unfinished Notes")
          (org-tags-match-list-sublevels nil))
+        nil)
+       ("d" "Done & Verify" tags "-archived-event/DONE|VERIFY|CANCELLED"
+        ((org-agenda-overriding-header "DONE - Review"))
+        nil)
+       ("v" "Verify" todo "VERIFY"
+        ((org-agenda-overriding-header "VERIFY"))
         nil)))
 
     (push "quote" org-protecting-blocks)
@@ -918,11 +923,10 @@ layers configuration."
      ;; Render special formatting in buffer
      org-pretty-entities t
      org-pretty-entities-include-sub-superscripts t
-     org-columns-default-format (concat "%45ITEM "
-                                        "%TODO "
-                                        "%3PRIORITY "
-                                        "%6Effort(Effort){:} "
-                                        "%6CLOCKSUM(Time){:}")
+     org-columns-default-format (concat "%12TODO "
+                                        "%60ITEM"
+                                        "%10MILESTONE"
+                                        "%1PRIORITY ")
 
      ;; Org Capture
      org-default-notes-file "~/personal/refile.org"
@@ -935,14 +939,8 @@ layers configuration."
      org-agenda-start-on-weekday nil
      org-agenda-start-with-clockreport-mode nil
      org-agenda-start-with-log-mode t
-     org-agenda-skip-additional-timestamps-same-entry t
+     org-agenda-skip-additional-timestamps-same-entry nil
      org-agenda-dim-blocked-tasks t
-     org-agenda-overriding-columns-format (concat "%CATEGORY "
-                                                  "%45ITEM "
-                                                  "%TODO "
-                                                  "%3PRIORITY "
-                                                  "%6Effort(Effort){:} "
-                                                  "%6CLOCKSUM(Time){:}")
      org-agenda-remove-tags 'prefix
      org-agenda-sorting-strategy '((agenda time-up priority-down habit-down category-up)
                                    (todo priority-down category-up todo-state-up)
@@ -970,12 +968,12 @@ layers configuration."
      org-todo-keywords '(;; Work Statuses
                          (sequence "TODO(t)"
                                    "NEXT(n)"
-                                   "WIP(w)"
+                                   "STARTED(s)"
                                    "|"
-                                   "QATest(q)"
+                                   "VERIFY(v)"
                                    "DONE(d)")
                          ;; Extraordinary Statuses
-                         (sequence "FUTURE(f)" "PROJECT(p)"  "HOLD(h@)" "|" "RETAIN(r)" "CANCELLED(c)" "BILLING(b)"))
+                         (sequence "FUTURE(f)" "PROJECT(p)"  "HOLD(h@)" "|" "CANCELLED(c)" "BILLING(b)"))
 
      ;; Export
 
