@@ -854,7 +854,6 @@ layers configuration."
          (agenda "/!-HOLD-FUTURE" ((org-agenda-overriding-header "== Agenda ==")
                                    (org-agenda-span 'week)))
          (todo "STARTED" ((org-agenda-overriding-header "STARTED - In Progress")
-                                 (org-agenda-todo-ignore-deadlines t)
                                  (org-tags-match-list-sublevels t)))
 
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
@@ -872,14 +871,13 @@ layers configuration."
          (todo "FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
                          (org-agenda-todo-ignore-scheduled t)
                          (org-agenda-todo-ignore-deadlines t)))
-         (tags "-archived-event/DONE|VERIFY|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+         (tags "-archived-journal/DONE|VERIFY|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
          )
         nil)
        ("k" "Kanban View"
         (
          (todo "STARTED" ((org-agenda-overriding-header "STARTED - In Progress")
-                                 (org-agenda-todo-ignore-deadlines t)
-                                 (org-tags-match-list-sublevels t)))
+                          (org-tags-match-list-sublevels t)))
 
          (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
                                   (org-tags-match-list-sublevels t)))
@@ -896,7 +894,7 @@ layers configuration."
 
          (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
                                          (org-tags-match-list-sublevels nil)))
-         (tags "-archived-event/DONE|VERIFY|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+         (tags "-archived-journal/DONE|VERIFY|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
          (agenda "/!-HOLD-FUTURE" ((org-agenda-overriding-header "== Agenda ==")
                                    (org-agenda-span 'week)))
          )
@@ -965,15 +963,13 @@ layers configuration."
 
      ;; State Workflow
      org-enforce-todo-dependencies t
-     org-todo-keywords '(;; Work Statuses
-                         (sequence "TODO(t)"
-                                   "NEXT(n)"
-                                   "STARTED(s)"
-                                   "|"
-                                   "VERIFY(v)"
-                                   "DONE(d)")
-                         ;; Extraordinary Statuses
-                         (sequence "FUTURE(f)" "PROJECT(p)"  "HOLD(h@)" "|" "CANCELLED(c)" "BILLING(b)"))
+
+     org-todo-keywords
+     '(;; Work Statuses
+       (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "|" "VERIFY(v)" "DONE(d)")
+       (sequence "APPT(a)" "FUTURE(f)" "HOLD(h@)" "|" "CANCELLED(c@)" "BILLING(b)")
+       (sequence "PROJECT" "|")
+       (sequence "QUESTION(Q)" "|" "ANSWERED(A)" "DESIGN(e)"))
 
      ;; Export
 
