@@ -874,7 +874,7 @@ layers configuration."
          (todo "FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
                          (org-agenda-todo-ignore-scheduled t)
                          (org-agenda-todo-ignore-deadlines t)))
-         (tags "-archived-journal/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+         (tags "-ARCHIVE-journal/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
          )
         nil)
        ("k" "Kanban View"
@@ -898,12 +898,12 @@ layers configuration."
 
          (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
                                          (org-tags-match-list-sublevels nil)))
-         (tags "-archived-journal/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
+         (tags "-ARCHIVE-journal/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
          (agenda "/!-HOLD-FUTURE" ((org-agenda-overriding-header "== Agenda ==")
                                    (org-agenda-span 'week)))
          )
         nil)
-       ("r" "Review" tags "refile-archived|unfinished_note-archived|TODO=\"DONE\"-archived|TODO=\"VERIFY\"-archived"
+       ("r" "Review" tags "refile-ARCHIVE|unfinished_note-ARCHIVE|TODO=\"DONE\"-ARCHIVE|TODO=\"VERIFY\"-ARCHIVE|TODO=\"CANCELLED\"-ARCHIVE"
         ((org-agenda-overriding-header "Review: Refile, VERIFY, DONE, & Unfinished Notes")
          (org-tags-match-list-sublevels t))
         nil)
@@ -911,7 +911,7 @@ layers configuration."
         ((org-agenda-overriding-header "REFILE & Unfinished Notes")
          (org-tags-match-list-sublevels nil))
         nil)
-       ("d" "Done & Verify" tags "-archived-event/DONE|VERIFY|CANCELLED"
+       ("d" "Done & Verify" tags "-ARCHIVE-event/DONE|VERIFY|CANCELLED"
         ((org-agenda-overriding-header "DONE - Review"))
         nil)
        ("v" "Verify" todo "VERIFY"
@@ -940,6 +940,8 @@ layers configuration."
      org-journal-dir "~/org/journal/"
 
      ;; Org Agenda
+     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export"
+     org-agenda-archives-mode t
      org-agenda-start-on-weekday nil
      org-agenda-start-with-clockreport-mode nil
      org-agenda-start-with-log-mode t
@@ -969,12 +971,13 @@ layers configuration."
 
      ;; State Workflow
      org-enforce-todo-dependencies t
+     org-enforce-todo-checkbox-dependencies t
 
      org-todo-keywords
      '(;; Work Statuses
        (sequence "PROJECT" "|")
-       (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "VERIFY(v)" "|" "DONE(d)")
-       (sequence "APPT(a)" "FUTURE(f)" "HOLD(h@)" "|" "CANCELLED(c@)" "BILLING(b)")
+       (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "VERIFY(v!)" "|" "DONE(d!)")
+       (sequence "APPT(a)" "FUTURE(f)" "HOLD(h@)" "|" "CANCELLED(c@)" "BILLING(B!)" "PAID(P!)")
        (sequence "QUESTION(Q)" "|" "ANSWERED(A)" "DESIGN(e)"))
 
      ;; Export
@@ -1001,7 +1004,7 @@ layers configuration."
      ;; Include current clock task in clock reports
      org-clock-report-include-clocking-task t
      org-edit-timestamp-down-means-later nil
-     org-log-done 'time
+     org-log-done nil
      org-log-into-drawer t
      org-time-clocksum-format (list :hours "%d"
                                     :require-hours t
