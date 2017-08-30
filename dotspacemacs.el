@@ -907,10 +907,6 @@ layers configuration."
         ((org-agenda-overriding-header "Review: Refile, VERIFY, DONE, & Unfinished Notes")
          (org-tags-match-list-sublevels t))
         nil)
-       ("u" "Unfinished Notes" tags "unfinished_note"
-        ((org-agenda-overriding-header "REFILE & Unfinished Notes")
-         (org-tags-match-list-sublevels nil))
-        nil)
        ("d" "Done & Verify" tags "-ARCHIVE-event/DONE|VERIFY|CANCELLED"
         ((org-agenda-overriding-header "DONE - Review"))
         nil)
