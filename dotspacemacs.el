@@ -948,6 +948,7 @@ layers configuration."
      org-agenda-skip-additional-timestamps-same-entry nil
      org-agenda-dim-blocked-tasks t
      org-agenda-remove-tags 'prefix
+     org-agenda-todo-ignore-scheduled 'future
      org-agenda-sorting-strategy '((agenda time-up priority-down habit-down category-up)
                                    (todo priority-down todo-state-up category-up )
                                    (tags priority-down category-up todo-state-up)
