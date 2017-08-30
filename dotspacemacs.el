@@ -940,7 +940,7 @@ layers configuration."
      org-journal-dir "~/org/journal/"
 
      ;; Org Agenda
-     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export"
+     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export\\|habit"
      org-agenda-archives-mode t
      org-agenda-start-on-weekday nil
      org-agenda-start-with-clockreport-mode nil
