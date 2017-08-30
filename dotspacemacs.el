@@ -912,7 +912,11 @@ layers configuration."
         nil)
        ("v" "Verify" todo "VERIFY"
         ((org-agenda-overriding-header "VERIFY"))
-        nil)))
+        nil)
+       ("c" "Scheduled" tags-todo "-habit"
+        ((org-agenda-overriding-header "Scheduled, Non-Habit")
+         (org-agenda-todo-ignore-scheduled nil)
+         (org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
 
     (push "quote" org-protecting-blocks)
 
