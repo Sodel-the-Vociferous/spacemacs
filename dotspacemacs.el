@@ -962,7 +962,7 @@ layers configuration."
      org-agenda-block-separator ""
      org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export"
      org-agenda-archives-mode t
-     org-agenda-start-on-weekday 0
+     org-agenda-start-on-weekday nil
      org-agenda-start-with-clockreport-mode nil
      org-agenda-start-with-log-mode t
      org-agenda-skip-additional-timestamps-same-entry nil
