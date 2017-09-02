@@ -934,6 +934,9 @@ layers configuration."
 
     (add-to-list 'org-agenda-log-mode-items 'state)
 
+    (add-hook-progn 'org-agenda-mode-hook
+                    (page-break-lines-mode t))
+
     (setq
 
      ;; Render special formatting in buffer
@@ -952,6 +955,7 @@ layers configuration."
      org-journal-dir "~/org/journal/"
 
      ;; Org Agenda
+     org-agenda-block-separator ""
      org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export\\|habit"
      org-agenda-archives-mode t
      org-agenda-start-on-weekday nil
