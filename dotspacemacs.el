@@ -925,7 +925,7 @@ layers configuration."
        ("v" "Verify" todo "VERIFY"
         ((org-agenda-overriding-header "VERIFY"))
         nil)
-       ("c" "Scheduled" tags-todo "-habit"
+       ("c" "Scheduled" tags-todo "-STYLE=\"habit\""
         ((org-agenda-overriding-header "Scheduled, Non-Habit")
          (org-agenda-todo-ignore-scheduled nil)
          (org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
@@ -956,7 +956,7 @@ layers configuration."
 
      ;; Org Agenda
      org-agenda-block-separator ""
-     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export\\|habit"
+     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export"
      org-agenda-archives-mode t
      org-agenda-start-on-weekday 0
      org-agenda-start-with-clockreport-mode nil
