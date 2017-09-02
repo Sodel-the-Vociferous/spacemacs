@@ -771,9 +771,13 @@ layers configuration."
     :init
     (add-hook-progn 'org-mode-hook (require 'org-caldav)))
 
-  (use-package helm-org-rifle
+  (use-package helm-org
     :init
-    (spacemacs/set-leader-keys "aoj" 'helm-org-rifle-agenda-files))
+    (spacemacs/set-leader-keys "aoj" 'helm-org-agenda-files-headings))
+
+  ;; (use-package helm-org-rifle
+  ;;   :init
+  ;;   (spacemacs/set-leader-keys "aoj" 'helm-org-rifle-agenda-files))
 
   (use-package org
     :defer t
