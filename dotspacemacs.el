@@ -968,6 +968,7 @@ layers configuration."
      org-agenda-start-with-log-mode t
      org-agenda-skip-additional-timestamps-same-entry nil
      org-agenda-dim-blocked-tasks t
+     org-blocker-hook (remove 'org-block-todo-from-checkboxes org-blocker-hook)
      org-agenda-remove-tags 'prefix
      org-agenda-todo-ignore-scheduled 'future
      org-agenda-sorting-strategy '((agenda time-up priority-down habit-down category-up)
