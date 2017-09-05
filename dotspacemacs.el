@@ -939,6 +939,7 @@ layers configuration."
     (add-to-list 'org-agenda-log-mode-items 'state)
 
     (add-hook-progn 'org-agenda-mode-hook
+                    (setq org-agenda-archives-mode t)
                     (page-break-lines-mode t))
 
     (setq
