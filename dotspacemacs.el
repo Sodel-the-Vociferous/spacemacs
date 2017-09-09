@@ -348,6 +348,10 @@ layers configuration."
     (interactive)
     (set-face-attribute 'default nil :height 140))
 
+  (defun user/make-font-small ()
+    (interactive)
+    (set-face-attribute 'default nil :height 100))
+
   (setq recentf-save-file "~/.emacs.d/recentf")
 
   (setq revert-without-query '(".+"))
@@ -859,6 +863,7 @@ layers configuration."
                  ((org-agenda-overriding-header "== Agenda ==")
                   (org-agenda-start-on-weekday nil)
                   (org-agenda-span 2)
+                  (org-agenda-skip-deadline-if-done t)
                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CHECKLIST")))))
          (todo "CHECKLIST"
                ((org-agenda-overriding-header ":: CHECKLISTS")))
@@ -870,7 +875,7 @@ layers configuration."
                ((org-agenda-overriding-header ":: NEXT - Near Future")
                 (org-tags-match-list-sublevels t)))
 
-         (todo "TODO"
+         (todo "TODO|QUESTION"
                ((org-agenda-overriding-header ":: TODO Tasks")
                 (org-agenda-skip-function '(org-agenda-skip-entry-if
                                             'scheduled 'deadline))))
@@ -929,7 +934,7 @@ layers configuration."
        ("v" "Verify" todo "VERIFY"
         ((org-agenda-overriding-header "VERIFY"))
         nil)
-       ("c" "Scheduled" tags-todo "-STYLE=\"habit\""
+       ("c" "Scheduled" tags-todo "-TODO=\"DONE\""
         ((org-agenda-overriding-header "Scheduled, Non-Habit")
          (org-agenda-todo-ignore-scheduled nil)
          (org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
@@ -952,6 +957,12 @@ layers configuration."
                                         "%10MILESTONE"
                                         "%1PRIORITY ")
 
+     org-todo-keyword-faces
+     '(
+       ("VERIFY" . "burlywood")
+       ("QUESTION" . "thistle")
+       ;; ("VERIFY" . (:foreground "purple" :weight bold))
+       )
      ;; Org Capture
      org-default-notes-file "~/personal/refile.org"
      org-cycle-separator-lines 2
@@ -968,7 +979,6 @@ layers configuration."
      org-agenda-start-with-log-mode t
      org-agenda-skip-additional-timestamps-same-entry nil
      org-agenda-dim-blocked-tasks t
-     org-blocker-hook (remove 'org-block-todo-from-checkboxes org-blocker-hook)
      org-agenda-remove-tags 'prefix
      org-agenda-todo-ignore-scheduled 'future
      org-agenda-sorting-strategy '((agenda time-up priority-down habit-down category-up)
