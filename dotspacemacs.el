@@ -42,6 +42,7 @@
      ipython-notebook
      javascript
      org
+     plantuml
      python
      rust
      shell-scripts
