@@ -114,6 +114,7 @@
                                       notmuch
                                       notmuch-labeler
                                       nxml
+                                      org-brain
                                       org-caldav
                                       org-projectile
                                       helm-org-rifle
@@ -1044,6 +1045,17 @@ layers configuration."
                                     :require-hours t
                                     :minutes ":%02d"
                                     :require-minutes t)))
+  (use-package org-brain :ensure t
+    :init
+    (progn
+      (setq org-brain-path "~/org/")
+      ;; For Evil users
+      ;; (eval-after-load 'evil
+      ;;   (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+      :config
+      (setq org-id-track-globally t)
+      (setq org-brain-visualize-default-choices 'all)
+      (setq org-brain-title-max-length 20)))
 
   (use-package org-capture
     :defer 10
