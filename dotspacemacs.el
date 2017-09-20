@@ -970,6 +970,18 @@ layers configuration."
                     (setq org-agenda-archives-mode t)
                     (page-break-lines-mode t))
 
+    ;; From https://emacs.stackexchange.com/questions/32430/how-to-sort-habits-by-priority-in-the-org-agenda-view
+    (defun hw-org-agenda-sort-habits (a b)
+      "Sort habits first by user priority, then by schedule+deadline+consistency."
+      (let ((ha (get-text-property 1 'org-habit-p a))
+            (hb (get-text-property 1 'org-habit-p b)))
+        (when (and ha hb)
+          (let ((pa (org-get-priority a))
+                (pb (org-get-priority b)))
+            (cond ((> pa pb) +1)
+                  ((< pa pb) -1)
+                  ((= pa pb) (org-cmp-values a b 'priority)))))))
+
     (setq
 
      ;; Render special formatting in buffer
@@ -1004,7 +1016,9 @@ layers configuration."
      org-agenda-dim-blocked-tasks t
      org-agenda-remove-tags 'prefix
      org-agenda-todo-ignore-scheduled 'future
-     org-agenda-sorting-strategy '((agenda time-up priority-down habit-down category-up)
+
+     org-agenda-cmp-user-defined 'hw-org-agenda-sort-habits
+     org-agenda-sorting-strategy '((agenda time-up user-defined-down)
                                    (todo priority-down todo-state-up category-up )
                                    (tags priority-down category-up todo-state-up)
                                    (search priority-down category-up todo-state-up))
