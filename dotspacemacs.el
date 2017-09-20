@@ -66,6 +66,7 @@
                                       ;; gitignore-mode
                                       aes
                                       ascii
+                                      ascii-art-to-unicode
                                       async
                                       auto-async-byte-compile
                                       auto-compile
@@ -1080,17 +1081,28 @@ layers configuration."
                                     :require-hours t
                                     :minutes ":%02d"
                                     :require-minutes t)))
-  (use-package org-brain :ensure t
+
+  (use-package ascii-art-to-unicode
+    :config
+    (defun aa2u-buffer ()
+      (aa2u (point-min) (point-max))))
+
+  (use-package org-brain
+    :ensure t
     :init
     (progn
       (setq org-brain-path "~/org/")
-      ;; For Evil users
-      ;; (eval-after-load 'evil
-      ;;   (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+
       :config
       (setq org-id-track-globally t)
       (setq org-brain-visualize-default-choices 'all)
-      (setq org-brain-title-max-length 20)))
+      (setq org-brain-title-max-length 35)
+
+      (eval-after-load 'evil
+        (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+
+      (require 'ascii-art-to-unicode)
+      (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)))
 
   (use-package org-capture
     :defer 10
