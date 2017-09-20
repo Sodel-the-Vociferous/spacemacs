@@ -116,6 +116,7 @@
                                       notmuch
                                       notmuch-labeler
                                       nxml
+                                      org-board
                                       org-brain
                                       org-caldav
                                       org-projectile
