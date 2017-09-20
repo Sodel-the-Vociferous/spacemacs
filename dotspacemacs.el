@@ -300,23 +300,44 @@ before layers configuration."
         evil-want-C-i-jump nil
         evil-want-C-u-scroll nil)
 
-  (setq evil-emacs-state-modes (append '(term-mode
-                                         anaconda-mode-view-mode
-                                         ;; elfeed-search-mode
-                                         ;; elfeed-show-mode
-                                         epa-key-list-mode
-                                         git-rebase-mode
-                                         magit-popup-mode
-                                         magit-blame-mode
-                                         magit-key-mode
-                                         magit-status-mode)
-                                       nil)
+  (let ((estate-modes '(term-mode
+                        org-brain-visualize-mode
+                        anaconda-mode-view-mode
+                        ;; elfeed-search-mode
+                        ;; elfeed-show-mode
+                        epa-key-list-mode
+                        git-rebase-mode
+                        magit-popup-mode
+                        magit-blame-mode
+                        magit-key-mode
+                        magit-status-mode))
+        (istate-modes '(org-capture-mode
+                        global-git-commit-mode
+                        git-commit-mode
+                        inferior-ess-mode)))
 
-        evil-insert-state-modes (append '(org-capture-mode
-                                          global-git-commit-mode
-                                          git-commit-mode
-                                          inferior-ess-mode)
-                                        nil))
+    (dolist (mode estate-modes)
+      (evil-set-initial-state mode 'emacs))
+    (dolist (mode istate-modes)
+      (evil-set-initial-state mode 'insert)))
+
+  ;; (setq evil-emacs-state-modes (append '(term-mode
+  ;;                                        anaconda-mode-view-mode
+  ;;                                        ;; elfeed-search-mode
+  ;;                                        ;; elfeed-show-mode
+  ;;                                        epa-key-list-mode
+  ;;                                        git-rebase-mode
+  ;;                                        magit-popup-mode
+  ;;                                        magit-blame-mode
+  ;;                                        magit-key-mode
+  ;;                                        magit-status-mode)
+  ;;                                      evil-emacs-state-modes)
+
+  ;;       evil-insert-state-modes (append '(org-capture-mode
+  ;;                                         global-git-commit-mode
+  ;;                                         git-commit-mode
+  ;;                                         inferior-ess-mode)
+  ;;                                       evil-insert-state-modes))
 
 
 
