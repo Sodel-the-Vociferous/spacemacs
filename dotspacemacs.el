@@ -1092,23 +1092,20 @@ layers configuration."
     :ensure t
     :init
     (progn
-      (setq org-brain-path "~/org/")
+      (setq org-brain-path "~/org/"))
 
-      :config
-      (setq org-id-track-globally t)
-      (setq org-brain-visualize-default-choices 'all)
-      (setq org-brain-title-max-length 35)
+    :config
+    (setq org-id-track-globally t)
+    (setq org-brain-visualize-default-choices 'all)
+    (setq org-brain-title-max-length 35)
 
-      (eval-after-load 'evil
-        (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
-
-      (require 'ascii-art-to-unicode)
-      (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)))
+    (require 'ascii-art-to-unicode)
+    (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer))
 
   (use-package org-capture
     :defer 10
     :init
-    (add-hook 'org-capture-mode-hook 'evil-insert-state))
+    (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create))
 
   (use-package org-indent
     :init
