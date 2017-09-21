@@ -876,78 +876,94 @@ layers configuration."
     ;; Default binding for <C-tab> is dumb. I want
     ;; `helm-company', dammit!
     (unbind-key "<C-tab>" org-mode-map)
-    (bind-key "<C-M-tab>" 'org-force-cycle-archived org-mode-map)
+    (bind-key "<C-M-tab>" #'org-force-cycle-archived org-mode-map)
+
+    (defun org-random-cmp (a b)
+      "Return -1,0 or 1 randomly"
+      (- (mod (random) 3) 1))
+
+    (setq org-agenda-cmp-user-defined #'org-random-cmp)
+
+    (setq
+
+     user/checklists-agenda
+     '(todo "CHECKLIST"
+            ((org-agenda-overriding-header ":: CHECKLISTS")))
+
+     user/started-agenda
+     '(todo "STARTED"
+            ((org-agenda-overriding-header ":: STARTED - In Progress")
+             (org-tags-match-list-sublevels t)))
+
+     user/next-agenda
+     '(todo "NEXT"
+            ((org-agenda-overriding-header ":: NEXT - Near Future")
+             (org-tags-match-list-sublevels t)))
+
+     user/todo-agenda
+     '(todo "TODO|QUESTION"
+            ((org-agenda-overriding-header ":: TODO Tasks")
+             (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                         'scheduled 'deadline))))
+
+     user/verify-agenda
+     '(todo "VERIFY"
+            ((org-agenda-overriding-header ":: Work to VERIFY")))
+
+     user/hold-agenda
+     '(todo "HOLD|BILLING"
+            ((org-agenda-overriding-header ":: HOLD - Blocked Tasks")))
+
+     user/refile-agenda
+     '(tags "refile-ARCHIVE|unfinished_note-ARCHIVE"
+            ((org-agenda-overriding-header ":: REFILE & Unfinished Notes")
+             (org-tags-match-list-sublevels nil)))
+
+     user/future-agenda
+     '(todo "FUTURE"
+            ((org-agenda-overriding-header ":: FUTURE - TODO, Eventually")
+             (org-agenda-todo-ignore-scheduled t)
+             (org-agenda-todo-ignore-deadlines t)))
+
+     user/review-agenda
+     '(tags "-ARCHIVE-journal/DONE|CANCELLED"
+            ((org-agenda-overriding-header ":: DONE - Review"))))
 
     ;; Make "C-z C-o a <RET>" display an overview of all
     ;; tasks in my agenda files.
     (setq
      org-agenda-custom-commands
-     '(("o" "Agenda Tasks"
+     `(("o" "Agenda Tasks"
         (
          (agenda nil
                  ((org-agenda-overriding-header "== Agenda ==")
                   (org-agenda-start-on-weekday nil)
                   (org-agenda-span 2)
                   (org-agenda-skip-deadline-if-done t)
-                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CHECKLIST")))))
-         (todo "CHECKLIST"
-               ((org-agenda-overriding-header ":: CHECKLISTS")))
-         (todo "STARTED"
-               ((org-agenda-overriding-header ":: STARTED - In Progress")
-                (org-tags-match-list-sublevels t)))
+                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CHECKLIST")))
+                  (org-agenda-cmp-user-defined #'hw-org-agenda-sort-habits)))
 
-         (todo "NEXT"
-               ((org-agenda-overriding-header ":: NEXT - Near Future")
-                (org-tags-match-list-sublevels t)))
-
-         (todo "TODO|QUESTION"
-               ((org-agenda-overriding-header ":: TODO Tasks")
-                (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                            'scheduled 'deadline))))
-
-         (todo "VERIFY"
-               ((org-agenda-overriding-header ":: Work to VERIFY")))
-
-         (todo "HOLD|BILLING"
-               ((org-agenda-overriding-header ":: HOLD - Blocked Tasks")))
-
-         (tags "refile-ARCHIVE|unfinished_note-ARCHIVE"
-               ((org-agenda-overriding-header ":: REFILE & Unfinished Notes")
-                (org-tags-match-list-sublevels nil)))
-
-         (todo "FUTURE"
-               ((org-agenda-overriding-header ":: FUTURE - TODO, Eventually")
-                (org-agenda-todo-ignore-scheduled t)
-                (org-agenda-todo-ignore-deadlines t)))
-         (tags "-ARCHIVE-journal/DONE|CANCELLED"
-               ((org-agenda-overriding-header ":: DONE - Review")))
-         )
+         ,user/checklists-agenda
+         ,user/started-agenda
+         ,user/next-agenda
+         ,user/todo-agenda
+         ,user/verify-agenda
+         ,user/hold-agenda
+         ,user/refile-agenda
+         ,user/future-agenda
+         ,user/review-agenda)
         nil)
        ("k" "Kanban View"
         (
-         (todo "STARTED|PROJECT" ((org-agenda-overriding-header "STARTED/PROJECT - In Progress")
-                                  (org-tags-match-list-sublevels t)))
-
-         (tags-todo "-meta/NEXT" ((org-agenda-overriding-header "NEXT - Near Future")
-                                  (org-tags-match-list-sublevels t)))
-
-         (todo "TODO" ((org-agenda-overriding-header "TODO Tasks")
-                       (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                                   'scheduled 'deadline))))
-
-         (todo "FUTURE" ((org-agenda-overriding-header "FUTURE - TODO, Eventually")
-                         (org-agenda-todo-ignore-scheduled t)
-                         (org-agenda-todo-ignore-deadlines t)))
-
-         (todo "BILLING|HOLD" ((org-agenda-overriding-header "HOLD - Blocked Tasks")))
-
-
-         (tags "refile|unfinished_note" ((org-agenda-overriding-header "REFILE & Unfinished Notes")
-                                         (org-tags-match-list-sublevels nil)))
-         (tags "-ARCHIVE-journal/DONE|CANCELLED" ((org-agenda-overriding-header "DONE - Review")))
-         (agenda "/!-HOLD-FUTURE" ((org-agenda-overriding-header "== Agenda ==")
-                                   (org-agenda-span 'week)))
-         )
+         ,user/checklists-agenda
+         ,user/started-agenda
+         ,user/next-agenda
+         ,user/todo-agenda
+         ,user/verify-agenda
+         ,user/hold-agenda
+         ,user/refile-agenda
+         ,user/future-agenda
+         ,user/review-agenda)
         nil)
        ("r" "Review" tags "refile-ARCHIVE|unfinished_note-ARCHIVE|TODO=\"DONE\"-ARCHIVE|TODO=\"VERIFY\"-ARCHIVE|TODO=\"CANCELLED\"-ARCHIVE"
         ((org-agenda-overriding-header "Review: Refile, VERIFY, DONE, & Unfinished Notes")
@@ -1019,9 +1035,8 @@ layers configuration."
      org-agenda-remove-tags 'prefix
      org-agenda-todo-ignore-scheduled 'future
 
-     org-agenda-cmp-user-defined 'hw-org-agenda-sort-habits
      org-agenda-sorting-strategy '((agenda time-up user-defined-down)
-                                   (todo priority-down todo-state-up category-up )
+                                   (todo priority-down todo-state-up category-up)
                                    (tags priority-down category-up todo-state-up)
                                    (search priority-down category-up todo-state-up))
      org-agenda-window-setup 'same-window
