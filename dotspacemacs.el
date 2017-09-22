@@ -804,9 +804,9 @@ layers configuration."
     :init
     (spacemacs/set-leader-keys "aoj" 'helm-org-agenda-files-headings))
 
-  ;; (use-package helm-org-rifle
-  ;;   :init
-  ;;   (spacemacs/set-leader-keys "aoj" 'helm-org-rifle-agenda-files))
+  (use-package helm-org-rifle
+    :init
+    (spacemacs/set-leader-keys "aor" 'helm-org-rifle-agenda-files))
 
   (use-package org
     :defer t
