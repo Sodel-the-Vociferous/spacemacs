@@ -1107,7 +1107,8 @@ layers configuration."
     :ensure t
     :init
     (progn
-      (setq org-brain-path "~/org/"))
+      (setq org-brain-path "~/org/")
+      (spacemacs/set-leader-keys "aov" 'org-brain-visualize))
 
     :config
     (setq org-id-track-globally t)
