@@ -385,9 +385,9 @@ layers configuration."
 
   (setq shell-command-switch "-lc")
 
-  ;; (use-package company-irony
-  ;;   :config
-  ;;   (add-hook 'irony-mode-hook (lambda () (cl-pushnew 'company-irony company-backends))))
+  (use-package company-irony
+    :config
+    (add-to-list 'company-backends 'company-irony))
 
   (use-package irony
     :init
