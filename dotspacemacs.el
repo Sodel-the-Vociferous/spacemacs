@@ -1065,7 +1065,7 @@ layers configuration."
        (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "VERIFY(v!)" "|" "DONE(d!)")
        (sequence "APPT(a)" "FUTURE(f)" "HOLD(h@)" "|" "CANCELLED(c@)" "BILLING(B!)" "PAID(P!)")
        (sequence "CHECKLIST" "|")
-       (sequence "QUESTION(Q)" "|" "ANSWERED(A)" "DESIGN(e)"))
+       (sequence "QUESTION(Q)" "|" "ANSWER(A)" "DESIGN(e)"))
 
      ;; Export
 
