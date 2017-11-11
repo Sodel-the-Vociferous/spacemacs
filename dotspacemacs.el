@@ -362,8 +362,9 @@ layers configuration."
   (menu-bar-mode 0)
   (column-number-mode t)
   (setq-default
-   indent-tabs-mode nil
-   tab-width 4)
+   indent-tabs-mode t
+   tab-width 4
+   standard-indent 4)
 
   (defun user/make-font-big ()
     (interactive)
