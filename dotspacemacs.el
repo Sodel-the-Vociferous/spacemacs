@@ -903,7 +903,8 @@ layers configuration."
 
      user/todo-agenda
      '(todo "TODO|QUESTION"
-            ((org-agenda-overriding-header ":: TODO Tasks")
+            ((org-agenda-archives-mode nil)
+             (org-agenda-overriding-header ":: TODO Tasks")
              (org-agenda-skip-function '(org-agenda-skip-entry-if
                                          'scheduled 'deadline))))
 
