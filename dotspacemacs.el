@@ -531,7 +531,7 @@ layers configuration."
       (bind-key "C-x <right>" 'next-buffer)
       (bind-key "C-x <left>" 'previous-buffer)
       (bind-key "C-h a" 'helm-apropos)
-      (bind-key "C-y" 'helm-show-kill-ring)
+      (bind-key* "C-y" 'helm-show-kill-ring)
       ;; (bind-key "C-g" 'keyboard-escape-quit)
       (bind-key "<mouse-3>" 'mouse-popup-menubar)
       (bind-key "<mouse-8>" (kbd "C-x <left>"))
@@ -971,6 +971,10 @@ layers configuration."
     ;; :idle (require 'org)
     :init
 
+	(defun user/org-add-ids-to-file ()
+	  (interactive)
+	  (org-map-entries 'org-id-get-create t 'file))
+
     (defun user/org-iswitchb-agenda ()
       "call `org-iswitchb' with two prefix args, restricting selection
             to agenda files."
@@ -1264,7 +1268,8 @@ layers configuration."
     (setq org-brain-title-max-length 35)
 
     (require 'ascii-art-to-unicode)
-    (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer))
+    ;; (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)
+	)
 
   (use-package org-capture
     :defer 10
