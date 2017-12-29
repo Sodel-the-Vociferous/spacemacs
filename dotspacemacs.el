@@ -491,7 +491,7 @@ layers configuration."
 
   (defun user/make-font-normal ()
     (interactive)
-    (set-face-attribute 'default nil :height 140))
+    (set-face-attribute 'default nil :height 120))
 
   (defun user/make-font-small ()
     (interactive)
