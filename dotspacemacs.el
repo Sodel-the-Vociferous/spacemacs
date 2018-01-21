@@ -44,6 +44,7 @@ values."
      (elfeed :variables rmh-elfeed-org-files '("~/personal/elfeed.org"))
      elfeed
      gtags
+	 imenu-list
      ;; auto-completion
      (auto-completion :variables
                       auto-completion-return-key-behavior nil
@@ -138,6 +139,7 @@ values."
                                       org-board
                                       org-brain
                                       org-caldav
+									  org-cliplink
                                       org-projectile
                                       helm-org-rifle
                                       outline-magic
@@ -285,7 +287,7 @@ values."
    dotspacemacs-major-mode-leader-key ","
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
    ;; (default "C-M-m")
-   dotspacemacs-major-mode-emacs-leader-key "C-M-m"
+   dotspacemacs-major-mode-emacs-leader-key "M-m m"
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs C-i, TAB and C-m, RET.
    ;; Setting it to a non-nil value, allows for separate commands under <C-i>
@@ -917,6 +919,14 @@ layers configuration."
   ;; outside of project dirs.
   (evil-leader/set-key "p F" 'projectile-find-file-in-known-projects)
 
+
+  (use-package lisp-mode
+	:config
+	(add-hook-progn
+	 'lisp-mode-hook
+
+	 (setq-local indent-tabs-mode nil)))
+
   (use-package json-mode
     :config
     (add-hook-progn
@@ -1217,7 +1227,7 @@ layers configuration."
        (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "VERIFY(v!)" "|" "DONE(d!)")
        (sequence "APPT(a)" "FUTURE(f)" "HOLD(h@)" "|" "CANCELLED(c@)" "BILLING(B!)" "PAID(P!)")
        (sequence "CHECKLIST" "|")
-       (sequence "QUESTION(Q)" "|" "ANSWER(A)" "DESIGN(e)"))
+       (sequence "QUESTION(Q)" "|" "ANSWER(A)" "CONFIRMED(C)"))
 
      ;; Export
 
@@ -1259,7 +1269,7 @@ layers configuration."
     :ensure t
     :init
     (progn
-      (setq org-brain-path "~/org/")
+      (setq org-brain-path "~/org/brain")
       (spacemacs/set-leader-keys "aov" 'org-brain-visualize))
 
     :config
