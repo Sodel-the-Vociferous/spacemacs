@@ -483,7 +483,7 @@ layers configuration."
   (menu-bar-mode 0)
   (column-number-mode t)
   (setq-default
-   indent-tabs-mode t
+   indent-tabs-mode nil
    tab-width 4
    standard-indent 4)
 
@@ -593,7 +593,7 @@ layers configuration."
               (setq c-default-style "K&R")
               (setq c-basic-offset 4)
               (setq tab-width 4)
-              (setq indent-tabs-mode nil)))
+              (setq indent-tabs-mode t)))
   (use-package company
     :diminish company-mode
     :config (progn
