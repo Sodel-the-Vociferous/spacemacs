@@ -1231,13 +1231,13 @@ layers configuration."
 
      ;; Export
 
-     org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
+     ;; org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
      org-export-creator-info nil
      org-export-with-sub-superscripts t
-     ;; When exporting to ODT, convert it to a PDF, too
-     org-export-odt-preferred-output-format "pdf"
-     ;; Remove logfiles after exporting a PDF
-     org-export-pdf-remove-logfiles t
+     ;; ;; When exporting to ODT, convert it to a PDF, too
+     ;; org-export-odt-preferred-output-format "pdf"
+     ;; ;; Remove logfiles after exporting a PDF
+     ;; org-export-pdf-remove-logfiles t
 
      ;; Time/Clocking
 
@@ -1269,7 +1269,11 @@ layers configuration."
     :ensure t
     :init
     (progn
-      (setq org-brain-path "~/org/brain")
+      (setq
+       org-brain-path "~/org/brain"
+       org-brain-visualize-one-child-per-line t
+       org-brain-headline-links-only-show-visible t)
+
       (spacemacs/set-leader-keys "aov" 'org-brain-visualize))
 
     :config
