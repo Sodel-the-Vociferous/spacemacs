@@ -1198,9 +1198,9 @@ layers configuration."
      org-agenda-todo-ignore-scheduled 'future
 
      org-agenda-sorting-strategy '((agenda time-up user-defined-down)
-                                   (todo priority-down todo-state-up category-up)
-                                   (tags priority-down category-up todo-state-up)
-                                   (search priority-down category-up todo-state-up))
+                                   (todo priority-down todo-state-up category-up time-up)
+                                   (tags priority-down category-up todo-state-up time-up)
+                                   (search priority-down category-up todo-state-up time-up))
      org-agenda-window-setup 'same-window
 
      org-goto-interface 'outline-path-completion
