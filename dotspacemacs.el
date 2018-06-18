@@ -42,7 +42,6 @@ values."
      markdown
      erc
      (elfeed :variables rmh-elfeed-org-files '("~/personal/elfeed.org"))
-     elfeed
      gtags
 	 imenu-list
      ;; auto-completion
