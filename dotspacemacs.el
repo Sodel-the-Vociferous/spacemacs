@@ -1126,7 +1126,7 @@ layers configuration."
          ,user/future-agenda
          ,user/review-agenda)
         nil)
-       ("r" "Review" tags "refile-ARCHIVE|unfinished-ARCHIVE|TODO=\"DONE\"-ARCHIVE|TODO=\"VERIFY\"-ARCHIVE|TODO=\"CANCELLED\"-ARCHIVE"
+       ("r" "Review" tags "refile-ARCHIVE|unfinished-ARCHIVE|TODO=\\\"DONE\\\"-ARCHIVE|TODO=\\\"VERIFY\\\"-ARCHIVE|TODO=\\\"CANCELLED\\\"-ARCHIVE"
         ((org-agenda-overriding-header "Review: Refile, VERIFY, DONE, & Unfinished Notes")
          (org-tags-match-list-sublevels t))
         nil)
