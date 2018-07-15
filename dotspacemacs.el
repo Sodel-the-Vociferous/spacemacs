@@ -1001,7 +1001,6 @@ layers configuration."
     (defmacro widen-and-maybe-renarrow (&rest body)
       `(let ((_was-narrowed (buffer-narrowed-p)))
          (widen)
-         (outline-hide-sublevels 1)
 
          ,@body
 
