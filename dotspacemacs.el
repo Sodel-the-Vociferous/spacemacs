@@ -139,6 +139,7 @@ values."
                                       org-brain
                                       org-caldav
 									  org-cliplink
+                                      org-noter
                                       org-projectile
                                       helm-org-rifle
                                       outline-magic
