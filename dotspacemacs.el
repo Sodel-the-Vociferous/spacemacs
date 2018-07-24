@@ -183,6 +183,7 @@ values."
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(
+                                    git-gutter+-mode
                                     powerline
                                     spaceline
                                     evil-search-highlight-persist
