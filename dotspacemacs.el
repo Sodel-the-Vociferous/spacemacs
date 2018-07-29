@@ -1065,7 +1065,9 @@ layers configuration."
      user/next-agenda
      '(todo "NEXT"
             ((org-agenda-overriding-header ":: NEXT - Near Future")
-             (org-tags-match-list-sublevels t)))
+             (org-tags-match-list-sublevels t)
+             (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                         'scheduled 'deadline))))
 
      user/todo-agenda
      '(todo "TODO|QUESTION"
@@ -1122,7 +1124,13 @@ layers configuration."
          ,user/review-agenda)
         nil)
        ("k" "Kanban View"
-        (
+        ((agenda nil
+                 ((org-agenda-overriding-header "== Agenda ==")
+                  (org-agenda-start-on-weekday nil)
+                  (org-agenda-span 2)
+                  (org-agenda-skip-deadline-if-done t)
+                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo 'any))
+                  (org-agenda-cmp-user-defined #'hw-org-agenda-sort-habits)))
          ,user/checklists-agenda
          ,user/started-agenda
          ,user/next-agenda
