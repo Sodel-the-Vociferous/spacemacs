@@ -144,6 +144,7 @@ values."
                                       helm-org-rifle
                                       outline-magic
                                       package+
+                                      pdf-tools
                                       persistent-soft
                                       pkg-info
                                       popup
@@ -629,11 +630,16 @@ layers configuration."
     :mode "\\.csv\'")
   (use-package dired-efap)
   (use-package dired-single)
+  (use-package pdf-tools
+    :defer t
+    :config (pdf-tools-install))
   (use-package doc-view
     :defer t
-    :mode ("\\.pdf\\'" . doc-view-mode)
     :mode ("\\.ps\\'" . doc-view-mode)
-    :config (setq doc-view-continuous t))
+    :config
+    (progn
+      (require 'pdf-tools)
+      (setq doc-view-continuous t)))
   (use-package ebib
     :defer t
     :mode "\\.bib\\'")
