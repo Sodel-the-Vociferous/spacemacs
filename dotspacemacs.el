@@ -1055,23 +1055,27 @@ layers configuration."
 
      user/checklists-agenda
      '(todo "CHECKLIST"
-            ((org-agenda-overriding-header ":: CHECKLISTS")))
+            ((org-agenda-archives-mode nil)
+             (org-agenda-overriding-header ":: CHECKLISTS")))
 
      user/started-agenda
      '(todo "STARTED"
-            ((org-agenda-overriding-header ":: STARTED - In Progress")
+            ((org-agenda-archives-mode nil)
+             (org-agenda-overriding-header ":: STARTED - In Progress")
              (org-tags-match-list-sublevels t)))
 
      user/next-agenda
      '(todo "NEXT"
-            ((org-agenda-overriding-header ":: NEXT - Near Future")
+            ((org-agenda-archives-mode nil)
+             (org-agenda-overriding-header ":: NEXT - Near Future")
              (org-tags-match-list-sublevels t)
              (org-agenda-skip-function '(org-agenda-skip-entry-if
                                          'scheduled 'deadline))))
 
      user/todo-agenda
      '(todo "TODO|QUESTION"
-            ((org-agenda-archives-mode nil)
+            (
+             (org-agenda-archives-mode nil)
              (org-agenda-overriding-header ":: TODO Tasks")
              (org-agenda-skip-function '(org-agenda-skip-entry-if
                                          'scheduled 'deadline))))
@@ -1106,13 +1110,13 @@ layers configuration."
      `(("o" "Agenda Tasks"
         (
          (agenda nil
-                 ((org-agenda-overriding-header "== Agenda ==")
+                 ((org-agenda-archives-mode t)
+                  (org-agenda-span 7)
+                  (org-agenda-overriding-header "== Agenda ==")
                   (org-agenda-start-on-weekday nil)
-                  (org-agenda-span 2)
                   (org-agenda-skip-deadline-if-done t)
                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CHECKLIST")))
                   (org-agenda-cmp-user-defined #'hw-org-agenda-sort-habits)))
-
          ,user/checklists-agenda
          ,user/started-agenda
          ,user/next-agenda
@@ -1125,9 +1129,10 @@ layers configuration."
         nil)
        ("k" "Kanban View"
         ((agenda nil
-                 ((org-agenda-overriding-header "== Agenda ==")
-                  (org-agenda-start-on-weekday nil)
+                 ((org-agenda-show-all-dates nil)
                   (org-agenda-span 2)
+                  (org-agenda-overriding-header "== Agenda ==")
+                  (org-agenda-start-on-weekday nil)
                   (org-agenda-skip-deadline-if-done t)
                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo 'any))
                   (org-agenda-cmp-user-defined #'hw-org-agenda-sort-habits)))
@@ -1141,6 +1146,10 @@ layers configuration."
          ,user/future-agenda
          ,user/review-agenda)
         nil)
+       ("a" "AGENDA" ((agenda nil (
+                                   (org-agenda-archives-mode t)
+                                   ;; (org-agenda-show-all-dates nil)
+                                   ))))
        ("r" "Review" tags "refile-ARCHIVE|unfinished-ARCHIVE|TODO=\\\"DONE\\\"-ARCHIVE|TODO=\\\"VERIFY\\\"-ARCHIVE|TODO=\\\"CANCELLED\\\"-ARCHIVE"
         ((org-agenda-overriding-header "Review: Refile, VERIFY, DONE, & Unfinished Notes")
          (org-tags-match-list-sublevels t))
@@ -1161,7 +1170,7 @@ layers configuration."
     ;; (add-to-list 'org-agenda-log-mode-items 'state)
 
     (add-hook-progn 'org-agenda-mode-hook
-                    (setq org-agenda-archives-mode t)
+                    ;; (setq org-agenda-archives-mode t)
                     (page-break-lines-mode t))
 
     ;; From https://emacs.stackexchange.com/questions/32430/how-to-sort-habits-by-priority-in-the-org-agenda-view
@@ -1202,7 +1211,7 @@ layers configuration."
      ;; Org Agenda
      org-agenda-block-separator ""
      org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export"
-     org-agenda-archives-mode t
+     ;; org-agenda-archives-mode t
      org-agenda-start-on-weekday nil
      org-agenda-start-with-clockreport-mode nil
      org-agenda-start-with-log-mode t
