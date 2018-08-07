@@ -71,7 +71,7 @@ values."
      ;;        shell-default-position 'bottom)
      syntax-checking
      search-engine
-     version-control
+     (version-control :variables version-control-global-margin nil)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
