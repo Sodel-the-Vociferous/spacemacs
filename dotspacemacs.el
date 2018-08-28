@@ -42,8 +42,8 @@ values."
      markdown
      erc
      (elfeed :variables rmh-elfeed-org-files '("~/personal/elfeed.org"))
-     elfeed
      gtags
+	 imenu-list
      ;; auto-completion
      (auto-completion :variables
                       auto-completion-return-key-behavior nil
@@ -71,7 +71,7 @@ values."
      ;;        shell-default-position 'bottom)
      syntax-checking
      search-engine
-     version-control
+     (version-control :variables version-control-global-margin nil)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -138,10 +138,13 @@ values."
                                       org-board
                                       org-brain
                                       org-caldav
+									  org-cliplink
+                                      org-noter
                                       org-projectile
                                       helm-org-rifle
                                       outline-magic
                                       package+
+                                      pdf-tools
                                       persistent-soft
                                       pkg-info
                                       popup
@@ -182,6 +185,7 @@ values."
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(
+                                    git-gutter+-mode
                                     powerline
                                     spaceline
                                     evil-search-highlight-persist
@@ -285,7 +289,7 @@ values."
    dotspacemacs-major-mode-leader-key ","
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
    ;; (default "C-M-m")
-   dotspacemacs-major-mode-emacs-leader-key "C-M-m"
+   dotspacemacs-major-mode-emacs-leader-key "M-m m"
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs C-i, TAB and C-m, RET.
    ;; Setting it to a non-nil value, allows for separate commands under <C-i>
@@ -481,7 +485,7 @@ layers configuration."
   (menu-bar-mode 0)
   (column-number-mode t)
   (setq-default
-   indent-tabs-mode t
+   indent-tabs-mode nil
    tab-width 4
    standard-indent 4)
 
@@ -591,7 +595,7 @@ layers configuration."
               (setq c-default-style "K&R")
               (setq c-basic-offset 4)
               (setq tab-width 4)
-              (setq indent-tabs-mode nil)))
+              (setq indent-tabs-mode t)))
   (use-package company
     :diminish company-mode
     :config (progn
@@ -626,11 +630,16 @@ layers configuration."
     :mode "\\.csv\'")
   (use-package dired-efap)
   (use-package dired-single)
+  (use-package pdf-tools
+    :defer t
+    :config (pdf-tools-install))
   (use-package doc-view
     :defer t
-    :mode ("\\.pdf\\'" . doc-view-mode)
     :mode ("\\.ps\\'" . doc-view-mode)
-    :config (setq doc-view-continuous t))
+    :config
+    (progn
+      (require 'pdf-tools)
+      (setq doc-view-continuous t)))
   (use-package ebib
     :defer t
     :mode "\\.bib\\'")
@@ -917,6 +926,14 @@ layers configuration."
   ;; outside of project dirs.
   (evil-leader/set-key "p F" 'projectile-find-file-in-known-projects)
 
+
+  (use-package lisp-mode
+	:config
+	(add-hook-progn
+	 'lisp-mode-hook
+
+	 (setq-local indent-tabs-mode nil)))
+
   (use-package json-mode
     :config
     (add-hook-progn
@@ -992,7 +1009,6 @@ layers configuration."
     (defmacro widen-and-maybe-renarrow (&rest body)
       `(let ((_was-narrowed (buffer-narrowed-p)))
          (widen)
-         (outline-hide-sublevels 1)
 
          ,@body
 
@@ -1039,21 +1055,27 @@ layers configuration."
 
      user/checklists-agenda
      '(todo "CHECKLIST"
-            ((org-agenda-overriding-header ":: CHECKLISTS")))
+            ((org-agenda-archives-mode nil)
+             (org-agenda-overriding-header ":: CHECKLISTS")))
 
      user/started-agenda
      '(todo "STARTED"
-            ((org-agenda-overriding-header ":: STARTED - In Progress")
+            ((org-agenda-archives-mode nil)
+             (org-agenda-overriding-header ":: STARTED - In Progress")
              (org-tags-match-list-sublevels t)))
 
      user/next-agenda
      '(todo "NEXT"
-            ((org-agenda-overriding-header ":: NEXT - Near Future")
-             (org-tags-match-list-sublevels t)))
+            ((org-agenda-archives-mode nil)
+             (org-agenda-overriding-header ":: NEXT - Near Future")
+             (org-tags-match-list-sublevels t)
+             (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                         'scheduled 'deadline))))
 
      user/todo-agenda
      '(todo "TODO|QUESTION"
-            ((org-agenda-archives-mode nil)
+            (
+             (org-agenda-archives-mode nil)
              (org-agenda-overriding-header ":: TODO Tasks")
              (org-agenda-skip-function '(org-agenda-skip-entry-if
                                          'scheduled 'deadline))))
@@ -1067,7 +1089,7 @@ layers configuration."
             ((org-agenda-overriding-header ":: HOLD - Blocked Tasks")))
 
      user/refile-agenda
-     '(tags "refile-ARCHIVE|unfinished_note-ARCHIVE"
+     '(tags "refile-ARCHIVE|unfinished-ARCHIVE"
             ((org-agenda-overriding-header ":: REFILE & Unfinished Notes")
              (org-tags-match-list-sublevels nil)))
 
@@ -1088,13 +1110,13 @@ layers configuration."
      `(("o" "Agenda Tasks"
         (
          (agenda nil
-                 ((org-agenda-overriding-header "== Agenda ==")
+                 ((org-agenda-archives-mode t)
+                  (org-agenda-span 7)
+                  (org-agenda-overriding-header "== Agenda ==")
                   (org-agenda-start-on-weekday nil)
-                  (org-agenda-span 2)
                   (org-agenda-skip-deadline-if-done t)
                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CHECKLIST")))
                   (org-agenda-cmp-user-defined #'hw-org-agenda-sort-habits)))
-
          ,user/checklists-agenda
          ,user/started-agenda
          ,user/next-agenda
@@ -1106,7 +1128,14 @@ layers configuration."
          ,user/review-agenda)
         nil)
        ("k" "Kanban View"
-        (
+        ((agenda nil
+                 ((org-agenda-show-all-dates nil)
+                  (org-agenda-span 2)
+                  (org-agenda-overriding-header "== Agenda ==")
+                  (org-agenda-start-on-weekday nil)
+                  (org-agenda-skip-deadline-if-done t)
+                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo 'any))
+                  (org-agenda-cmp-user-defined #'hw-org-agenda-sort-habits)))
          ,user/checklists-agenda
          ,user/started-agenda
          ,user/next-agenda
@@ -1117,7 +1146,11 @@ layers configuration."
          ,user/future-agenda
          ,user/review-agenda)
         nil)
-       ("r" "Review" tags "refile-ARCHIVE|unfinished_note-ARCHIVE|TODO=\"DONE\"-ARCHIVE|TODO=\"VERIFY\"-ARCHIVE|TODO=\"CANCELLED\"-ARCHIVE"
+       ("a" "AGENDA" ((agenda nil (
+                                   (org-agenda-archives-mode t)
+                                   ;; (org-agenda-show-all-dates nil)
+                                   ))))
+       ("r" "Review" tags "refile-ARCHIVE|unfinished-ARCHIVE|TODO=\\\"DONE\\\"-ARCHIVE|TODO=\\\"VERIFY\\\"-ARCHIVE|TODO=\\\"CANCELLED\\\"-ARCHIVE"
         ((org-agenda-overriding-header "Review: Refile, VERIFY, DONE, & Unfinished Notes")
          (org-tags-match-list-sublevels t))
         nil)
@@ -1137,7 +1170,7 @@ layers configuration."
     ;; (add-to-list 'org-agenda-log-mode-items 'state)
 
     (add-hook-progn 'org-agenda-mode-hook
-                    (setq org-agenda-archives-mode t)
+                    ;; (setq org-agenda-archives-mode t)
                     (page-break-lines-mode t))
 
     ;; From https://emacs.stackexchange.com/questions/32430/how-to-sort-habits-by-priority-in-the-org-agenda-view
@@ -1178,7 +1211,7 @@ layers configuration."
      ;; Org Agenda
      org-agenda-block-separator ""
      org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export"
-     org-agenda-archives-mode t
+     ;; org-agenda-archives-mode t
      org-agenda-start-on-weekday nil
      org-agenda-start-with-clockreport-mode nil
      org-agenda-start-with-log-mode t
@@ -1188,9 +1221,9 @@ layers configuration."
      org-agenda-todo-ignore-scheduled 'future
 
      org-agenda-sorting-strategy '((agenda time-up user-defined-down)
-                                   (todo priority-down todo-state-up category-up)
-                                   (tags priority-down category-up todo-state-up)
-                                   (search priority-down category-up todo-state-up))
+                                   (todo priority-down todo-state-up category-up time-up)
+                                   (tags priority-down category-up todo-state-up time-up)
+                                   (search priority-down category-up todo-state-up time-up))
      org-agenda-window-setup 'same-window
 
      org-goto-interface 'outline-path-completion
@@ -1217,17 +1250,17 @@ layers configuration."
        (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "VERIFY(v!)" "|" "DONE(d!)")
        (sequence "APPT(a)" "FUTURE(f)" "HOLD(h@)" "|" "CANCELLED(c@)" "BILLING(B!)" "PAID(P!)")
        (sequence "CHECKLIST" "|")
-       (sequence "QUESTION(Q)" "|" "ANSWER(A)" "DESIGN(e)"))
+       (sequence "QUESTION(Q)" "|" "ANSWER(A)" "CONFIRMED(C)"))
 
      ;; Export
 
-     org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
+     ;; org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
      org-export-creator-info nil
      org-export-with-sub-superscripts t
-     ;; When exporting to ODT, convert it to a PDF, too
-     org-export-odt-preferred-output-format "pdf"
-     ;; Remove logfiles after exporting a PDF
-     org-export-pdf-remove-logfiles t
+     ;; ;; When exporting to ODT, convert it to a PDF, too
+     ;; org-export-odt-preferred-output-format "pdf"
+     ;; ;; Remove logfiles after exporting a PDF
+     ;; org-export-pdf-remove-logfiles t
 
      ;; Time/Clocking
 
@@ -1259,8 +1292,12 @@ layers configuration."
     :ensure t
     :init
     (progn
-      (setq org-brain-path "~/org/")
-      (spacemacs/set-leader-keys "aov" 'org-brain-visualize))
+      (setq
+       org-brain-path "~/org/brain"
+       org-brain-visualize-one-child-per-line t
+       org-brain-headline-links-only-show-visible t)
+
+      (spacemacs/set-leader-keys "aob" 'org-brain-visualize))
 
     :config
     (setq org-id-track-globally t)
