@@ -1309,7 +1309,8 @@ layers configuration."
        org-brain-visualize-one-child-per-line t
        org-brain-headline-links-only-show-visible t)
 
-      (spacemacs/set-leader-keys "aob" 'org-brain-visualize))
+      (spacemacs/set-leader-keys "aob" 'org-brain-visualize)
+      (spacemacs/set-leader-keys "aop" 'org-brain-visualize-at-point))
 
     :config
     (setq org-id-track-globally t)
