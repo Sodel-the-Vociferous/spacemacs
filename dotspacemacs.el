@@ -1319,7 +1319,7 @@ layers configuration."
     (setq org-brain-title-max-length 35)
 
     (require 'ascii-art-to-unicode)
-    ;; (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)
+    (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)
 	)
 
   (use-package org-capture
