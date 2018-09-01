@@ -1307,7 +1307,8 @@ layers configuration."
       (setq
        org-brain-path "~/org/brain"
        org-brain-visualize-one-child-per-line t
-       org-brain-headline-links-only-show-visible t)
+       org-brain-headline-links-only-show-visible t
+       org-brain-visualize-sort-function 'ignore)
 
       (spacemacs/set-leader-keys "aob" 'org-brain-visualize)
       (spacemacs/set-leader-keys "aop" 'org-brain-visualize-at-point))
