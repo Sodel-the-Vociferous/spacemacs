@@ -990,7 +990,9 @@ layers configuration."
 
 	(defun user/org-add-ids-to-file ()
 	  (interactive)
-	  (org-map-entries 'org-id-get-create t 'file))
+      ;; Don't add ids to "orglink"-tagged entries. This is so link-only entries
+      ;; don't clutter up org-brain.
+	  (org-map-entries 'org-id-get-create "-orglink" 'file))
 
     (defun user/org-iswitchb-agenda ()
       "call `org-iswitchb' with two prefix args, restricting selection
