@@ -990,7 +990,9 @@ layers configuration."
 
 	(defun user/org-add-ids-to-file ()
 	  (interactive)
-	  (org-map-entries 'org-id-get-create t 'file))
+      ;; Don't add ids to "orglink"-tagged entries. This is so link-only entries
+      ;; don't clutter up org-brain.
+	  (org-map-entries 'org-id-get-create "-orglink" 'file))
 
     (defun user/org-iswitchb-agenda ()
       "call `org-iswitchb' with two prefix args, restricting selection
@@ -1292,12 +1294,24 @@ layers configuration."
     :ensure t
     :init
     (progn
+
+      (defun org-brain-visualize-at-point ()
+        (interactive)
+        (org-brain-visualize (org-brain-entry-at-pt)))
+
+      (org-link-set-parameters
+       "id+headline"
+       :complete (lambda () (org-brain-link-complete "id"))
+       :follow 'org-brain-goto)
+
       (setq
        org-brain-path "~/org/brain"
        org-brain-visualize-one-child-per-line t
-       org-brain-headline-links-only-show-visible t)
+       org-brain-headline-links-only-show-visible t
+       org-brain-visualize-sort-function 'ignore)
 
-      (spacemacs/set-leader-keys "aob" 'org-brain-visualize))
+      (spacemacs/set-leader-keys "aob" 'org-brain-visualize)
+      (spacemacs/set-leader-keys "aop" 'org-brain-visualize-at-point))
 
     :config
     (setq org-id-track-globally t)
@@ -1305,7 +1319,7 @@ layers configuration."
     (setq org-brain-title-max-length 35)
 
     (require 'ascii-art-to-unicode)
-    ;; (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)
+    (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)
 	)
 
   (use-package org-capture
