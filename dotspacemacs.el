@@ -1299,6 +1299,11 @@ layers configuration."
         (interactive)
         (org-brain-visualize (org-brain-entry-at-pt)))
 
+      (org-link-set-parameters
+       "id+headline"
+       :complete (lambda () (org-brain-link-complete "id"))
+       :follow 'org-brain-goto)
+
       (setq
        org-brain-path "~/org/brain"
        org-brain-visualize-one-child-per-line t
