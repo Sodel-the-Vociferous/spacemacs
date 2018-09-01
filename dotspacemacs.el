@@ -1294,6 +1294,11 @@ layers configuration."
     :ensure t
     :init
     (progn
+
+      (defun org-brain-visualize-at-point ()
+        (interactive)
+        (org-brain-visualize (org-brain-entry-at-pt)))
+
       (setq
        org-brain-path "~/org/brain"
        org-brain-visualize-one-child-per-line t
