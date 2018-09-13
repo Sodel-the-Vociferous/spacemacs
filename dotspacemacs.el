@@ -1122,10 +1122,9 @@ layers configuration."
          ,user/checklists-agenda
          ,user/started-agenda
          ,user/next-agenda
-         ,user/todo-agenda
          ,user/verify-agenda
+         ,user/todo-agenda
          ,user/hold-agenda
-         ,user/refile-agenda
          ,user/future-agenda
          ,user/review-agenda)
         nil)
@@ -1141,10 +1140,9 @@ layers configuration."
          ,user/checklists-agenda
          ,user/started-agenda
          ,user/next-agenda
-         ,user/todo-agenda
          ,user/verify-agenda
+         ,user/todo-agenda
          ,user/hold-agenda
-         ,user/refile-agenda
          ,user/future-agenda
          ,user/review-agenda)
         nil)
