@@ -1188,8 +1188,10 @@ layers configuration."
     (setq
 
      ;; Render special formatting in buffer
+     org-startup-indented t
      org-pretty-entities t
      org-pretty-entities-include-sub-superscripts t
+     org-use-sub-superscripts '{}
      org-columns-default-format (concat "%12TODO "
                                         "%60ITEM"
                                         "%10MILESTONE"
@@ -1208,23 +1210,31 @@ layers configuration."
      ;; Org Journal
      org-journal-dir "~/org/journal/"
 
+     ;; Org Archiving
+     org-archive-subtree-add-inherited-tags t
+
      ;; Org Agenda
      org-agenda-block-separator ""
+     org-agenda-dim-blocked-tasks t
+     org-agenda-follow-indirect t
      org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export\\|nomob\\(ile\\|agenda\\)?"
-     ;; org-agenda-archives-mode t
+     org-agenda-property-position 'same-line
+     org-agenda-remove-tags 'prefix
+     org-agenda-skip-additional-timestamps-same-entry nil
+     org-agenda-span 'fortnight
      org-agenda-start-on-weekday nil
      org-agenda-start-with-clockreport-mode nil
      org-agenda-start-with-log-mode t
-     org-agenda-skip-additional-timestamps-same-entry nil
-     org-agenda-dim-blocked-tasks t
-     org-agenda-remove-tags 'prefix
      org-agenda-todo-ignore-scheduled 'future
+     org-agenda-window-setup 'same-window
+     org-enforce-todo-checkbox-dependencies nil
+     org-enforce-todo-dependencies t
+     org-habit-graph-column 44
 
      org-agenda-sorting-strategy '((agenda time-up user-defined-down)
                                    (todo priority-down todo-state-up category-up time-up)
                                    (tags priority-down category-up todo-state-up time-up)
                                    (search priority-down category-up todo-state-up time-up))
-     org-agenda-window-setup 'same-window
 
      org-goto-interface 'outline-path-completion
      org-goto-max-level 2
@@ -1240,10 +1250,15 @@ layers configuration."
      ido-max-directory-size 100000
 
      ;; Tags
+     org-tags-exclude-from-inheritance '("PRJ" "SUBPRJ" "unfinished")
+
+     ;; Priority
+     org-lowest-priority 69
+     org-default-priority 67
 
      ;; State Workflow
      org-enforce-todo-dependencies t
-     org-enforce-todo-checkbox-dependencies t
+     org-enforce-todo-checkbox-dependencies nil
 
      org-todo-keywords
      '(;; Work Statuses
@@ -1303,10 +1318,13 @@ layers configuration."
        :follow 'org-brain-goto)
 
       (setq
-       org-brain-path "~/org/brain"
-       org-brain-visualize-one-child-per-line t
+       org-brain-file-entries-use-title nil
        org-brain-headline-links-only-show-visible t
-       org-brain-visualize-sort-function 'ignore)
+       org-brain-path "~/org/brain"
+       org-brain-visualize-default-choices 'all
+       org-brain-visualize-one-child-per-line t
+       org-brain-visualize-sort-function 'ignore
+       )
 
       (spacemacs/set-leader-keys "aob" 'org-brain-visualize)
       (spacemacs/set-leader-keys "aop" 'org-brain-visualize-at-point))
