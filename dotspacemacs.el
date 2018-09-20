@@ -1217,7 +1217,7 @@ layers configuration."
      org-agenda-block-separator ""
      org-agenda-dim-blocked-tasks t
      org-agenda-follow-indirect t
-     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|\\(no\\)?export\\|nomob\\(ile\\|agenda\\)?"
+     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|play\\|\\(no\\)?export\\|nomob\\(ile\\|agenda\\)"
      org-agenda-property-position 'same-line
      org-agenda-remove-tags 'prefix
      org-agenda-skip-additional-timestamps-same-entry nil
