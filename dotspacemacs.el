@@ -1346,9 +1346,11 @@ layers configuration."
       (spacemacs/set-leader-keys "aop" 'org-brain-visualize-at-point))
 
     :config
-    (setq org-id-track-globally t)
-    (setq org-brain-visualize-default-choices 'all)
-    (setq org-brain-title-max-length 35)
+    (setq
+     org-id-track-globally t
+     org-id-link-to-org-use-id t
+     org-brain-visualize-default-choices 'all
+     org-brain-title-max-length 35)
 
     (require 'ascii-art-to-unicode)
     (add-hook 'org-brain-after-visualize-hook #'aa2u-buffer)
