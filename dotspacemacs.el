@@ -94,6 +94,8 @@ values."
                                       bash-completion
                                       bind-key
                                       browse-kill-ring
+                                      calfw
+                                      calfw-org
                                       charmap
                                       color-theme
                                       concurrent
@@ -589,6 +591,20 @@ layers configuration."
   (use-package bash-completion
     :config (bash-completion-setup))
   (use-package browse-kill-ring)
+  (use-package calfw-open-org-calendar
+    :commands cfw:open-org-calendar
+    :init
+    (progn
+      (require 'calfw)
+      (require 'calfw-org)
+
+      (spacemacs/set-leader-keys "aoC" #'cfw:open-org-calendar)
+
+      (defun user/calfw-org-remove-tags (oldfn &rest args)
+        (let ((org-agenda-remove-tags t))
+          (apply oldfn args)))
+
+      (advice-add #'cfw:org-collect-schedules-period :around #'user/calfw-org-remove-tags)))
   (use-package cc-mode
     :defer t
     :config (progn
