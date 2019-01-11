@@ -1290,6 +1290,21 @@ layers configuration."
        (sequence "QUESTION(Q)" "|" "ANSWER(A)" "CONFIRMED(C)"))
 
      ;; Custom Links
+
+     ;; (defun user/link-from-org-link (link desc)
+     ;;   (save-window-excursion
+     ;;     (condition-case nil
+     ;;         (if (s-starts-with? link "id:")
+     ;;             (progn
+     ;;               (message "YES")
+     ;;               (message link)
+     ;;               (org-open-link-from-string (s-concat "[[" link "]]")
+     ;;                                          (org-get-heading t t t t)))
+     ;;           desc)
+     ;;       (error desc))))
+
+     ;; (setq org-make-link-description-function 'user/link-from-org-link)
+
      (defun user/org-id+headline-complete ()
        (save-window-excursion
          (let ((item (org-refile-get-location)))
