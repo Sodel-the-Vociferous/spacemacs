@@ -978,7 +978,9 @@ layers configuration."
 
   (use-package org-caldav
     :init
-    (add-hook-progn 'org-mode-hook (require 'org-caldav)))
+    (progn
+      (spacemacs/set-leader-keys "aoS" #'org-caldav-sync)
+      (add-hook-progn 'org-mode-hook (require 'org-caldav))))
 
   (use-package helm-org
     :init
@@ -1023,6 +1025,10 @@ layers configuration."
       "j c" 'org-clock-goto)
 
     :config
+
+    (defun user/pvlink (ID TEXT)
+      "Make a link for propview"
+      (s-join "" (list "[[id:" ID "][" ITEM "]]")))
 
     (defmacro widen-and-maybe-renarrow (&rest body)
       `(let ((_was-narrowed (buffer-narrowed-p)))
@@ -1283,6 +1289,18 @@ layers configuration."
        (sequence "CHECKLIST" "|")
        (sequence "QUESTION(Q)" "|" "ANSWER(A)" "CONFIRMED(C)"))
 
+     ;; Custom Links
+     (defun user/org-id+headline-complete ()
+       (save-window-excursion
+         (let ((item (org-refile-get-location)))
+           (find-file (nth 1 item))
+           (goto-char (nth 3 item))
+           (s-concat "id:" (org-id-get-create)))))
+
+     (org-link-set-parameters
+      "id+headline"
+      :complete (lambda () (user/org-id+headline-complete)))
+
      ;; Export
 
      ;; org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
@@ -1327,11 +1345,6 @@ layers configuration."
       (defun org-brain-visualize-at-point ()
         (interactive)
         (org-brain-visualize (org-brain-entry-at-pt)))
-
-      (org-link-set-parameters
-       "id+headline"
-       :complete (lambda () (org-brain-link-complete "id"))
-       :follow 'org-brain-goto)
 
       (setq
        org-brain-file-entries-use-title nil
