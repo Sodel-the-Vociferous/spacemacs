@@ -1207,6 +1207,7 @@ layers configuration."
                   ((< pa pb) -1)
                   ((= pa pb) (org-cmp-values a b 'priority)))))))
 
+    (spacemacs/set-leader-keys "aoi" 'org-display-inline-images)
     (setq
 
      ;; Render special formatting in buffer
@@ -1388,6 +1389,11 @@ layers configuration."
     :defer 10
     :init
     (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create))
+
+  (use-package org-drill
+    :demand t
+    :init
+    (spacemacs/set-leader-keys "aod" 'org-drill))
 
   (use-package org-indent
     :init
