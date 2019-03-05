@@ -1133,7 +1133,7 @@ layers configuration."
      org-agenda-custom-commands
      `(("o" "Agenda Tasks"
         (
-         (agenda nil
+         (agenda "-drill"
                  ((org-agenda-archives-mode t)
                   (org-agenda-span 7)
                   (org-agenda-overriding-header "== Agenda ==")
@@ -1151,7 +1151,7 @@ layers configuration."
          ,user/review-agenda)
         nil)
        ("k" "Kanban View"
-        ((agenda nil
+        ((agenda "-drill"
                  ((org-agenda-show-all-dates nil)
                   (org-agenda-span 2)
                   (org-agenda-overriding-header "== Agenda ==")
@@ -1168,7 +1168,7 @@ layers configuration."
          ,user/future-agenda
          ,user/review-agenda)
         nil)
-       ("a" "AGENDA" ((agenda nil (
+       ("a" "AGENDA" ((agenda "-drill" (
                                    (org-agenda-archives-mode t)
                                    ;; (org-agenda-show-all-dates nil)
                                    ))))
