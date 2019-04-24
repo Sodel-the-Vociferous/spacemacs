@@ -1170,9 +1170,9 @@ layers configuration."
          ,user/review-agenda)
         nil)
        ("a" "AGENDA" ((agenda "-drill" (
-                                   (org-agenda-archives-mode t)
-                                   ;; (org-agenda-show-all-dates nil)
-                                   ))))
+                                        (org-agenda-archives-mode t)
+                                        ;; (org-agenda-show-all-dates nil)
+                                        ))))
        ("r" "Review" tags "refile-ARCHIVE|unfinished-ARCHIVE|TODO=\\\"DONE\\\"-ARCHIVE|TODO=\\\"VERIFY\\\"-ARCHIVE|TODO=\\\"CANCELLED\\\"-ARCHIVE"
         ((org-agenda-overriding-header "Review: Refile, VERIFY, DONE, & Unfinished Notes")
          (org-tags-match-list-sublevels t))
@@ -1291,33 +1291,6 @@ layers configuration."
        (sequence "CHECKLIST" "|")
        (sequence "QUESTION(Q)" "|" "ANSWER(A)" "CONFIRMED(C)"))
 
-     ;; Custom Links
-
-     ;; (defun user/link-from-org-link (link desc)
-     ;;   (save-window-excursion
-     ;;     (condition-case nil
-     ;;         (if (s-starts-with? link "id:")
-     ;;             (progn
-     ;;               (message "YES")
-     ;;               (message link)
-     ;;               (org-open-link-from-string (s-concat "[[" link "]]")
-     ;;                                          (org-get-heading t t t t)))
-     ;;           desc)
-     ;;       (error desc))))
-
-     ;; (setq org-make-link-description-function 'user/link-from-org-link)
-
-     (defun user/org-id+headline-complete ()
-       (save-window-excursion
-         (let ((item (org-refile-get-location)))
-           (find-file (nth 1 item))
-           (goto-char (nth 3 item))
-           (s-concat "id:" (org-id-get-create)))))
-
-     (org-link-set-parameters
-      "id+headline"
-      :complete (lambda () (user/org-id+headline-complete)))
-
      ;; Export
 
      ;; org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
@@ -1347,7 +1320,18 @@ layers configuration."
      org-time-clocksum-format (list :hours "%d"
                                     :require-hours t
                                     :minutes ":%02d"
-                                    :require-minutes t)))
+                                    :require-minutes t))
+
+    (defun user/org-id+headline-complete ()
+      (save-window-excursion
+        (let ((item (org-refile-get-location)))
+          (find-file (nth 1 item))
+          (goto-char (nth 3 item))
+          (s-concat "id:" (org-id-get-create)))))
+
+    (org-link-set-parameters
+     "id+headline"
+     :complete (lambda () (user/org-id+headline-complete))))
 
   (use-package ascii-art-to-unicode
     :config
