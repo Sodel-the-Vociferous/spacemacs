@@ -43,13 +43,10 @@ values."
      (elfeed :variables rmh-elfeed-org-files '("~/personal/elfeed.org"))
      gtags
 	 imenu-list
-     ;; auto-completion
      (auto-completion :variables
                       auto-completion-return-key-behavior nil
                       auto-completion-tab-key-behavior 'complete)
      better-defaults
-
-     ;; markdown
      (c-c++ :variables c-c++-enable-clang-support t)
      python
      common-lisp
@@ -64,10 +61,6 @@ values."
      python
      rust
      shell-scripts
-     ;; semantic
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
      syntax-checking
      search-engine
      sql
