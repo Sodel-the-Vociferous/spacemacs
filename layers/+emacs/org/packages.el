@@ -175,7 +175,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "ee" 'org-export-dispatch
         "f" 'org-set-effort
         "P" 'org-set-property
-        ":" 'org-set-tags
+        ":" 'org-set-tags-command
 
         "a" 'org-agenda
         "b" 'org-tree-to-indirect-buffer
