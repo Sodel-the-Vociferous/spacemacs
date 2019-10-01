@@ -1249,10 +1249,10 @@ layers configuration."
      org-enforce-todo-dependencies t
      org-habit-graph-column 44
 
-     org-agenda-sorting-strategy '((agenda time-up user-defined-down)
-                                   (todo priority-down todo-state-up time-up)
-                                   (tags priority-down todo-state-up time-up)
-                                   (search priority-down category-up time-up))
+     org-agenda-sorting-strategy '((agenda timestamp-up user-defined-down timestamp-up)
+                                   (todo todo-state-up priority-down timestamp-up)
+                                   (tags todo-state-up priority-down timestamp-up)
+                                   (search priority-down category-up timestamp-up))
 
      org-goto-interface 'outline-path-completion
      org-goto-max-level 2
