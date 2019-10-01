@@ -137,6 +137,7 @@ values."
 									  org-cliplink
                                       org-noter
                                       org-projectile
+                                      helm-org
                                       helm-org-rifle
                                       outline-magic
                                       package+
@@ -1374,6 +1375,7 @@ layers configuration."
     (spacemacs/set-leader-keys "aod" 'org-drill))
 
   (use-package org-indent
+    :requires org-compat
     :init
     (add-hook-progn 'org-mode-hook
                     (org-indent-mode)))
