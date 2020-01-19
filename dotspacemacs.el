@@ -1264,7 +1264,7 @@ layers configuration."
      ;; create it.
      org-refile-allow-creating-parent-nodes 'confirm
      org-completion-use-ido t
-     ido-everywhere t
+     ido-everywhere nil
      ido-max-directory-size 100000
 
      ;; Tags
