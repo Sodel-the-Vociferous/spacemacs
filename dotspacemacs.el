@@ -134,6 +134,7 @@ values."
                                       org-board
                                       org-brain
                                       org-caldav
+                                      oauth2
 									  org-cliplink
                                       org-noter
                                       org-projectile
@@ -164,6 +165,8 @@ values."
                                       ucs-utils
                                       undo-tree
                                       unfill
+                                      visual-fill
+                                      visual-fill-column
                                       wc-mode
                                       web-beautify
                                       web-mode
