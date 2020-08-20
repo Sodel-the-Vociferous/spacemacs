@@ -985,6 +985,31 @@ layers configuration."
     :init
     (spacemacs/set-leader-keys "aor" 'helm-org-rifle-agenda-files))
 
+  ;; General Org Export Config
+  (use-package ox
+    :init
+    (progn
+      org-export-creator-info nil
+      org-export-with-sub-superscripts t
+      ;; ;; When exporting to ODT, convert it to a PDF, too
+      ;; org-export-odt-preferred-output-format "pdf"
+      ))
+
+  ;; Org LaTeX Export Config
+  (use-package ox-latex
+    :init
+
+    (progn
+      ;; Make UTF8 symbols export properly.
+      (setq org-latex-inputenc-alist '(("utf8" . "utf8x")))
+      ;; Make math symbols export properly.
+      (setq org-latex-default-packages-alist (cons '("mathletters" "ucs" nil) org-latex-default-packages-alist))
+
+      ;; org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
+      ;; ;; Remove logfiles after exporting a PDF
+      ;; org-export-pdf-remove-logfiles t
+      ))
+
   (use-package org
     :defer t
     :mode ("\\.\\(org\\|org_archive\\)\\'" . org-mode)
@@ -1284,16 +1309,6 @@ layers configuration."
        (sequence "APPT(a)" "FUTURE(f)" "HOLD(h@)" "|" "CANCELLED(c@)" "BILLING(B!)" "PAID(P!)")
        (sequence "CHECKLIST" "|")
        (sequence "QUESTION(Q)" "|" "ANSWER(A)" "CONFIRMED(C)"))
-
-     ;; Export
-
-     ;; org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
-     org-export-creator-info nil
-     org-export-with-sub-superscripts t
-     ;; ;; When exporting to ODT, convert it to a PDF, too
-     ;; org-export-odt-preferred-output-format "pdf"
-     ;; ;; Remove logfiles after exporting a PDF
-     ;; org-export-pdf-remove-logfiles t
 
      ;; Time/Clocking
 
