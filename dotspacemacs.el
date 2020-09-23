@@ -675,8 +675,8 @@ layers configuration."
 
       (setq-default elfeed-search-filter "@2-weeks-ago -skip +unread +daily ")))
 
-  ;; (use-package elfeed-org
-  ;;   :config (elfeed-org))
+  (use-package elfeed-org
+    :config (elfeed-org))
 
   (setq
    erc-port 6697
