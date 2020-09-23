@@ -1008,6 +1008,18 @@ layers configuration."
       ;; Make math symbols export properly.
       (setq org-latex-default-packages-alist (cons '("mathletters" "ucs" nil) org-latex-default-packages-alist))
 
+      ;; In org LaTeX export, add an empty line between paragraphs (add bigskip)
+      ;; where \n\n (double newline) is used.
+      (defun my-replace-double-newline (backend)
+        "replace multiple blank lines with bigskip"
+        (interactive)
+        (goto-char (point-min))
+        (while (re-search-forward "\\(^\\s-*$\\)\n\n+" nil t)
+          (replace-match "\n#+LATEX: \\par\\vspace{\\baselineskip}\\noindent\n" nil t)
+          (forward-char 1)))
+
+      (add-hook 'org-export-before-processing-hook 'my-replace-double-newline)
+
       ;; org-latex-pdf-process '("latexmk -bibtex -pdf %f && latexmk --bibtex -c")
       ;; ;; Remove logfiles after exporting a PDF
       ;; org-export-pdf-remove-logfiles t
