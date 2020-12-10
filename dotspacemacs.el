@@ -78,6 +78,7 @@ values."
                                       ;; gitconfig-mode
                                       ;; gitignore-mode
                                       aes
+                                      ;; anki-editor
                                       ascii
                                       ascii-art-to-unicode
                                       async
