@@ -688,7 +688,9 @@ layers configuration."
    erc-log-write-after-insert t
    erc-log-write-after-send t
    erc-log-channels-directory (concat "~/doc/chats/" system-name "-irc/")
-   erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"))
+   erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE")
+   erc-image-inline-rescale 'window
+   erc-prompt-for-nickserv-password nil)
 
   (add-hook-progn
    'erc-mode-hook
@@ -783,7 +785,8 @@ layers configuration."
 	:config
 	(setq evil-toggle-key "C-`"
 		  evil-want-C-i-jump nil
-		  evil-want-C-u-scroll nil)
+		  evil-want-C-u-scroll nil
+          evil-want-Y-yank-to-eol nil)
 
 	(let ((estate-modes '(term-mode
 						  org-brain-visualize-mode
@@ -881,7 +884,11 @@ layers configuration."
   (setq helm-google-suggest-use-curl-p t)
 
   (use-package helm-company
-    :bind ("<C-tab>" . helm-company))
+    :bind ("<C-tab>" . helm-company)
+    :init
+    (progn
+      (setq
+       helm-company-initialize-pattern-with-prefix :downcase)))
 
   ;; (use-package helm-gtags
   ;;   :demand t
@@ -982,11 +989,16 @@ layers configuration."
 
   (use-package helm-org
     :init
-    (spacemacs/set-leader-keys "aoj" 'helm-org-agenda-files-headings))
+    (progn
+      (spacemacs/set-leader-keys "aoj" 'helm-org-agenda-files-headings)
+      (setq
+       helm-org-show-filename t)))
 
   (use-package helm-org-rifle
     :init
-    (spacemacs/set-leader-keys "aor" 'helm-org-rifle-agenda-files))
+    (progn
+      (spacemacs/set-leader-keys "aor" 'helm-org-rifle-agenda-files)
+      (setq helm-org-rifle-show-path t)))
 
   ;; General Org Export Config
   (use-package ox
@@ -1273,10 +1285,13 @@ layers configuration."
 
      ;; Org Agenda
      org-agenda-block-separator ""
+     org-agenda-clockreport-parameter-plist '(:link t :maxlevel 2 :compact t :stepskip0 t :fileskip0 t)
+     org-agenda-dim-blocked-tasks nil
      org-agenda-dim-blocked-tasks t
      org-agenda-follow-indirect t
-     org-agenda-hide-tags-regexp "ARCHIVE\\|work\\|play\\|\\(no\\)?export\\|nomob\\(ile\\|agenda\\)"
+     org-agenda-hide-tags-regexp "^\\(work\\|\\(no\\)?export\\|habit\\|computer\\|nomob\\(ile\\|agenda\\)\\)"
      org-agenda-property-position 'same-line
+     org-agenda-property-position 'same-line t
      org-agenda-remove-tags 'prefix
      org-agenda-skip-additional-timestamps-same-entry nil
      org-agenda-span 'fortnight
@@ -1285,8 +1300,6 @@ layers configuration."
      org-agenda-start-with-log-mode t
      org-agenda-todo-ignore-scheduled 'future
      org-agenda-window-setup 'same-window
-     org-enforce-todo-checkbox-dependencies nil
-     org-enforce-todo-dependencies t
      org-habit-graph-column 44
 
      org-agenda-sorting-strategy '((agenda timestamp-up user-defined-down timestamp-up)
@@ -1309,6 +1322,7 @@ layers configuration."
 
      ;; Tags
      org-tags-exclude-from-inheritance '("PRJ" "SUBPRJ" "unfinished")
+     ;; org-tags-column -77
 
      ;; Priority
      org-lowest-priority 69
@@ -1373,12 +1387,12 @@ layers configuration."
 
       (setq
        org-brain-file-entries-use-title nil
+       org-brain-file-entries-use-title nil
        org-brain-headline-links-only-show-visible t
        org-brain-path "~/org/brain"
        org-brain-visualize-default-choices 'all
        org-brain-visualize-one-child-per-line t
-       org-brain-visualize-sort-function 'ignore
-       )
+       org-brain-visualize-sort-function 'ignore)
 
       (spacemacs/set-leader-keys "aob" 'org-brain-visualize)
       (spacemacs/set-leader-keys "aop" 'org-brain-visualize-at-point))
@@ -1402,7 +1416,12 @@ layers configuration."
   (use-package org-drill
     :demand t
     :init
-    (spacemacs/set-leader-keys "aod" 'org-drill))
+    (progn
+      (spacemacs/set-leader-keys "aod" 'org-drill)
+      (setq
+       org-drill-learn-fraction 0.45
+       org-drill-maximum-duration 30
+       org-drill-maximum-items-per-session 40)))
 
   (use-package org-indent
     :requires org-compat
