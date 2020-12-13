@@ -1292,7 +1292,6 @@ layers configuration."
      org-agenda-follow-indirect t
      org-agenda-hide-tags-regexp "^\\(work\\|\\(no\\)?export\\|habit\\|computer\\|nomob\\(ile\\|agenda\\)\\)"
      org-agenda-property-position 'same-line
-     org-agenda-property-position 'same-line t
      org-agenda-remove-tags 'prefix
      org-agenda-skip-additional-timestamps-same-entry nil
      org-agenda-span 'fortnight
