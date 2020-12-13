@@ -1322,7 +1322,7 @@ layers configuration."
 
      ;; Tags
      org-tags-exclude-from-inheritance '("PRJ" "SUBPRJ" "unfinished")
-     ;; org-tags-column -77
+     org-tags-column 0
 
      ;; Priority
      org-lowest-priority 69
