@@ -1008,6 +1008,7 @@ layers configuration."
       (setq
        org-export-creator-info nil
        org-export-with-sub-superscripts t
+       org-export-with-tags nil
        ;; ;; When exporting to ODT, convert it to a PDF, too
        ;; org-export-odt-preferred-output-format "pdf"
        )
