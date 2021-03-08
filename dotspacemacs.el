@@ -1005,10 +1005,12 @@ layers configuration."
   (use-package ox
     :init
     (progn
-      org-export-creator-info nil
-      org-export-with-sub-superscripts t
-      ;; ;; When exporting to ODT, convert it to a PDF, too
-      ;; org-export-odt-preferred-output-format "pdf"
+      (setq
+       org-export-creator-info nil
+       org-export-with-sub-superscripts t
+       ;; ;; When exporting to ODT, convert it to a PDF, too
+       ;; org-export-odt-preferred-output-format "pdf"
+       )
       ))
 
   ;; Org LaTeX Export Config
