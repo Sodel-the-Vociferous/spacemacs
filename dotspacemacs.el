@@ -1013,6 +1013,16 @@ layers configuration."
        ;; ;; When exporting to ODT, convert it to a PDF, too
        ;; org-export-odt-preferred-output-format "pdf"
        )
+
+      (add-to-list 'org-latex-classes
+           '("book-noparts"
+              "\\documentclass{book}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
       ))
 
   ;; Org LaTeX Export Config
