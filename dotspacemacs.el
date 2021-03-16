@@ -109,6 +109,7 @@ values."
                                       elfeed
                                       elfeed-org
                                       emms
+                                      evil-collection
                                       evil-rsi
                                       expand-region
                                       f
