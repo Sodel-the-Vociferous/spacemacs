@@ -1590,3 +1590,6 @@ layers configuration."
   ;; I want to start with an ielm buffer open
   (save-window-excursion
     (ielm)))
+
+;; TEMP:
+(load "~/prj/emacs/anki-editor/anki-editor.el")
