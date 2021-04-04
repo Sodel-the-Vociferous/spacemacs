@@ -1798,8 +1798,8 @@ before packages are loaded."
   (save-window-excursion
     (ielm))
 
-  ;; ;; TEMP:
-  ;; (load "~/prj/emacs/anki-editor/anki-editor.el")
+  ;; TEMP:
+  (load "~/prj/emacs/anki-editor/anki-editor.el")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
