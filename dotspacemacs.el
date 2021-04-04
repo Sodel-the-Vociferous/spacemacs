@@ -85,7 +85,6 @@ This function should only modify configuration layer settings."
                                       ;; gitignore-mode
                                       aes
                                       ;; anki-editor
-                                      ascii
                                       ascii-art-to-unicode
                                       async
                                       auto-async-byte-compile
@@ -106,7 +105,6 @@ This function should only modify configuration layer settings."
                                       ctable
                                       dash
                                       deferred
-                                      dired+
                                       dired-efap
                                       dired-single
                                       doc-view
@@ -134,7 +132,7 @@ This function should only modify configuration layer settings."
                                       js2-mode
                                       json-mode
                                       json-reformat
-                                      list-processes+
+                                      list-processes
                                       list-utils
                                       log4e
                                       markdown-mode
@@ -170,10 +168,8 @@ This function should only modify configuration layer settings."
                                       ;; slime-company
                                       ssh-config-mode
                                       term-run
-                                      tidy
                                         ;tron-theme
                                         ;tronesque-theme
-                                      tup-mode
                                       ucs-utils
                                       undo-tree
                                       unfill
