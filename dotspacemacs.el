@@ -187,7 +187,7 @@ This function should only modify configuration layer settings."
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
-   
+
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(
                                     git-gutter+-mode
@@ -636,13 +636,11 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  
+
   (setq package-archives '(("org" . "http://orgmode.org/elpa/")
                            ("MELPA" . "http://melpa.org/packages/")
                            ("gnu" . "http://elpa.gnu.org/packages/")))
   (package-initialize)
-
-  (toggle-debug-on-quit)
 
   ;; Load Private Emacs Config
   (when (file-exists-p custom-file)
